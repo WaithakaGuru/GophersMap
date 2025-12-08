@@ -6,7 +6,7 @@ package exercise
 
 func GetMaxVal(nums []int) int {
 	max := nums[0]
-	for val := range nums {
+	for _, val := range nums {
 		if val > max {
 			max = val
 		}
