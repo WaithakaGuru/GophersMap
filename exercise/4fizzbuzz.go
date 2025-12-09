@@ -7,7 +7,7 @@ package exercise
 
 import "fmt"
 
-func FizBuzz() {
+func FizzBuzz() {
 	for i := 1; i <= 100; i++ {
 		if i%3 == 0 && i%5 == 0 {
 			fmt.Println("FizzBuzz")

@@ -4,7 +4,7 @@
 
 package exercise
 
-func RemoveDuplicates[T string | int](items []T) []T {
+func RemoveDuplicates[T string | int](items ...T) []T {
 	cleanElements := make(map[T]int, 0)
 
 	for _, item := range items {

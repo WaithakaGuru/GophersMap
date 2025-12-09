@@ -4,7 +4,7 @@
 
 package exercise
 
-func GetMaxVal(nums []int) int {
+func GetMaxVal(nums ...int) int {
 	max := nums[0]
 	for _, val := range nums {
 		if val > max {

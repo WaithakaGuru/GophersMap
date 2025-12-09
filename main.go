@@ -1,13 +1,7 @@
-/*
-	Testing Area
-*/
-
 package main
 
-import (
-	req "github.com/WaithakaGuru/gophersmap/exercise"
-)
+import "fmt"
 
 func main() {
-	req.GetUsers()
+	fmt.Println("Learning GO")
 }

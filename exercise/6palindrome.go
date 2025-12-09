@@ -4,7 +4,7 @@
 
 package exercise
 
-func isPalindrome(str string) bool {
+func IsPalindrome(str string) bool {
 	// use two pointer method
 	i, j := 0, len(str)-1
 

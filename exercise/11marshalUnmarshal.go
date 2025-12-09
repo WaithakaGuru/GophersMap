@@ -20,7 +20,10 @@ func Marshal(data User) ([]byte, error) {
 	return result, nil
 }
 
-func unmarshal(jsStr []byte) (User, error) {
+func Unmarshal(jsStr []byte, Err error) (User, error) {
+	if Err != nil {
+		return User{}, Err
+	}
 	resultStruct := User{}
 	err := json.Unmarshal(jsStr, &resultStruct)
 	if err != nil {
