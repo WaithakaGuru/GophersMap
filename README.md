@@ -11,7 +11,7 @@
 - [Contributing](#contributing)
 - [License](#license)
 
----
+### [➡️ Go to exercises](exercise/allExercises.md)
 
 ## 🚀 Getting Started with Golang
 
