@@ -13,6 +13,8 @@ func ReverseString(str string) string {
 		temp := runeStr[i]
 		runeStr[i] = runeStr[j]
 		runeStr[j] = temp
+		i++
+		j--
 	}
 	return string(runeStr)
 }

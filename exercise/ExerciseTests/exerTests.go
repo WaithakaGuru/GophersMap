@@ -20,7 +20,7 @@ import (
 // }
 
 func testInfo(num int) {
-	fmt.Println("\nTest results for Exercise ", num)
+	fmt.Printf("\n\nTest results for Exercise %v \n", num)
 }
 
 func NonArgsTest(num int, test func()) {
