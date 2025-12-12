@@ -98,4 +98,7 @@ func main() {
 
 	testInfo(19)
 	exer.HandleIncrements()
+
+	testInfo(19)
+	exer.CounterIncrementHandler()
 }
