@@ -87,8 +87,12 @@ func main() {
 	// exer.CreateServer()
 
 	testInfo(16)
-	exer.GetUsers()
+	// the data is too huge clogging the terminal
+	// exer.GetUsers()
 
 	testInfo(17)
 	exer.RunConcurrent()
+
+	testInfo(18)
+	exer.HandleChannels()
 }
