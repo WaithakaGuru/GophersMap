@@ -95,4 +95,7 @@ func main() {
 
 	testInfo(18)
 	exer.HandleChannels()
+
+	testInfo(19)
+	exer.HandleIncrements()
 }
