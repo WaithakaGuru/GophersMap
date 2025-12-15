@@ -16,10 +16,9 @@ func Fail(info string) *Failure {
 	return &Failure{info: info}
 }
 
-func Divide[n int | float32 | float64](a, b n) n {
+func Divide[n int | float32 | float64](a, b n) (n, error) {
 	if b == 0 {
-		Fail("Division Error: Cannot divide by Zero")
-		return 0
+		return 0, Fail("Division Error: Cannot divide by Zero")
 	}
-	return a / b
+	return a / b, nil
 }

@@ -104,4 +104,8 @@ func main() {
 
 	testInfo(21)
 	fmt.Println(exer.CheckNegative(-25))
+
+	testInfo(22)
+	result, divErr := exer.Divide(22, 4)
+	fmt.Println(result, divErr)
 }
