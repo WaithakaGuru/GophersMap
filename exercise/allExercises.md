@@ -66,7 +66,7 @@ Write a function that returns an error if a number is negative.
 ## [22. Custom Error Type](22customError.go)
 Define and use a custom error type.
 
-## [23. Interface for Shape]()
+## [23. Interface for Shape](23interfaces.go)
 Create an interface `Shape` with `Area()` and `Perimeter()` methods. Implement for `Circle` and `Rectangle`.
 
 ## [24. Sorting a Slice]()

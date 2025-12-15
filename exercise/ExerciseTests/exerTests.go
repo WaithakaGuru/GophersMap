@@ -108,4 +108,9 @@ func main() {
 	testInfo(22)
 	result, divErr := exer.Divide(22, 4)
 	fmt.Println(result, divErr)
+
+	testInfo(23)
+	rect1 := exer.Rectangle{Height: 21, Width: 43}
+	// passing rectangle as a shape since it implements all Shpe methods
+	exer.DescribeShape(rect1)
 }
