@@ -4,25 +4,13 @@
 
 package exercise
 
-// am going to create my own error function
-
-type Failure struct {
-	info string
-}
-
-func (f Failure) Error() string {
-	return f.info
-}
-
-func Fail(info string) *Failure {
-	return &Failure{info: info}
-}
+import "errors"
 
 // implement the function to check and return and error if the number is negative
-
+// handling errors using the 'errors' built-in go package
 func CheckNegative[n int | float32 | float64](num n) error {
 	if num < 0 {
-		return Fail("Failure: the number is negative")
+		return errors.New("Failure: the number is negative")
 	}
 	return nil
 }

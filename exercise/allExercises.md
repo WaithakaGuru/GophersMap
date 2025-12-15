@@ -51,19 +51,19 @@ Make an HTTP GET request to a public API and print the response.
 ## [17. Goroutine Example](17goRoutines.go)
 Run two functions concurrently using goroutines.
 
-## [18. Channel Communication]()
+## [18. Channel Communication](18channels.go)
 Use a channel to send and receive data between goroutines.
 
-## [19. Mutex for Safe Counter]()
+## [19. Mutex for Safe Counter](19mutex.go)
 Create a counter that can be safely incremented by multiple goroutines using a mutex.
 
 ## [20. Timer and Ticker]()
 Demonstrate the use of `time.Timer` and `time.Ticker`.
 
-## [21. Error Handling]()
+## [21. Error Handling](21errorHandling.go)
 Write a function that returns an error if a number is negative.
 
-## [22. Custom Error Type]()
+## [22. Custom Error Type](22customError.go)
 Define and use a custom error type.
 
 ## [23. Interface for Shape]()
