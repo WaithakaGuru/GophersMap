@@ -4,14 +4,13 @@
 
 package exercise
 
-import "time"
-
+import _ "time"
 
 func TimerAndTicker() {
 
-	ticker1 := time.NewTicker(time.Second)
+	// ticker1 := time.NewTicker(time.Second)
 
-	timer1 := time.NewTimer(30 * time.Second)
+	// timer1 := time.NewTimer(30 * time.Second)
 
-	ticker1.C
+	// ticker1
 }

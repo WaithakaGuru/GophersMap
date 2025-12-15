@@ -101,4 +101,7 @@ func main() {
 
 	testInfo(19)
 	exer.CounterIncrementHandler()
+
+	testInfo(21)
+	fmt.Println(exer.CheckNegative(-25))
 }
