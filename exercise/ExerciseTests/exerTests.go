@@ -113,4 +113,7 @@ func main() {
 	rect1 := exer.Rectangle{Height: 21, Width: 43}
 	// passing rectangle as a shape since it implements all Shpe methods
 	exer.DescribeShape(rect1)
+
+	testInfo(24)
+	fmt.Println(exer.SortSlice(exer.People))
 }
