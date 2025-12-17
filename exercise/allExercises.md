@@ -72,7 +72,7 @@ Create an interface `Shape` with `Area()` and `Perimeter()` methods. Implement f
 ## [24. Sorting a Slice](24sortSlice.go)
 Sort a slice of structs by a field (e.g., age).
 
-## [25. Dependency Injection]()
+## [25. Dependency Injection](25dependecyInjection.go)
 Write a function that takes an interface and demonstrate dependency injection.
 
 ## [26. Environment Variables]()
