@@ -75,7 +75,7 @@ Sort a slice of structs by a field (e.g., age).
 ## [25. Dependency Injection](25dependecyInjection.go)
 Write a function that takes an interface and demonstrate dependency injection.
 
-## [26. Environment Variables]()
+## [26. Environment Variables](26envVariables.go)
 Read and print an environment variable.
 
 ## [27. Simple Logger]()
