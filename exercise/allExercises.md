@@ -78,7 +78,7 @@ Write a function that takes an interface and demonstrate dependency injection.
 ## [26. Environment Variables](26envVariables.go)
 Read and print an environment variable.
 
-## [27. Simple Logger]()
+## [27. Simple Logger](27simpleLogger.go)
 Implement a simple logger that writes logs to a file with timestamps.
 
 ## [28. RESTful API (CRUD)]()

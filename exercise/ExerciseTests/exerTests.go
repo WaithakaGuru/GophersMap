@@ -6,6 +6,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	exer "github.com/WaithakaGuru/gophersmap/exercise"
 )
@@ -90,32 +91,32 @@ func main() {
 	// the data is too huge clogging the terminal
 	// exer.GetUsers()
 
-	// testInfo(17)
-	// exer.RunConcurrent()
+	testInfo(17)
+	exer.RunConcurrent()
 
-	// testInfo(18)
-	// exer.HandleChannels()
+	testInfo(18)
+	exer.HandleChannels()
 
-	// testInfo(19)
-	// exer.HandleIncrements()
+	testInfo(19)
+	exer.HandleIncrements()
 
-	// testInfo(19)
-	// exer.CounterIncrementHandler()
+	testInfo(19)
+	exer.CounterIncrementHandler()
 
-	// testInfo(21)
-	// fmt.Println(exer.CheckNegative(-25))
+	testInfo(21)
+	fmt.Println(exer.CheckNegative(-25))
 
-	// testInfo(22)
-	// result, divErr := exer.Divide(22, 4)
-	// fmt.Println(result, divErr)
+	testInfo(22)
+	result, divErr := exer.Divide(22, 4)
+	fmt.Println(result, divErr)
 
-	// testInfo(23)
-	// rect1 := exer.Rectangle{Height: 21, Width: 43}
-	// // passing rectangle as a shape since it implements all Shpe methods
-	// exer.DescribeShape(rect1)
+	testInfo(23)
+	rect1 := exer.Rectangle{Height: 21, Width: 43}
+	// passing rectangle as a shape since it implements all Shpe methods
+	exer.DescribeShape(rect1)
 
-	// testInfo(24)
-	// fmt.Println(exer.SortSlice(exer.People))
+	testInfo(24)
+	fmt.Println(exer.SortSlice(exer.People))
 
 	testInfo((25))
 	// inject dependency via the Fetcher struct which implements the UserData interface
@@ -123,4 +124,9 @@ func main() {
 	var worker1 = exer.NewWorker(exer.Fetcher{}, 303)
 	worker1.DisplayWorkerInfo()
 
+	testInfo(26)
+	exer.LoadEnv()
+
+	testInfo(27)
+	exer.Logger("Today is a good day", "simpleLogger.txt", os.Stdout)
 }
