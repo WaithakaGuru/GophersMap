@@ -83,25 +83,19 @@ func main() {
 	testInfo(14)
 	exer.PrintCLIArguments()
 
-	testInfo(15)
 	// commented since it is a blocking function
-	// exer.CreateServer()
+	// NonArgsTest(15, exer.CreateServer)
 
-	testInfo(16)
 	// the data is too huge clogging the terminal
-	// exer.GetUsers()
+	// NonArgsTest(16, exer.GetUsers)
 
-	testInfo(17)
-	exer.RunConcurrent()
+	NonArgsTest(17, exer.RunConcurrent)
 
-	testInfo(18)
-	exer.HandleChannels()
+	NonArgsTest(18, exer.HandleChannels)
 
-	testInfo(19)
-	exer.HandleIncrements()
+	NonArgsTest(19, exer.HandleIncrements)
 
-	testInfo(19)
-	exer.CounterIncrementHandler()
+	NonArgsTest(20, exer.CounterIncrementHandler)
 
 	testInfo(21)
 	fmt.Println(exer.CheckNegative(-25))
@@ -118,15 +112,16 @@ func main() {
 	testInfo(24)
 	fmt.Println(exer.SortSlice(exer.People))
 
-	testInfo((25))
 	// inject dependency via the Fetcher struct which implements the UserData interface
 	// 	 which is required by the Workermodel for Data fetching
 	var worker1 = exer.NewWorker(exer.Fetcher{}, 303)
-	worker1.DisplayWorkerInfo()
+	NonArgsTest(25, worker1.DisplayWorkerInfo)
 
-	testInfo(26)
+	NonArgsTest(26, exer.LoadEnv)
 	exer.LoadEnv()
 
 	testInfo(27)
 	exer.Logger("Today is a good day", "simpleLogger.txt", os.Stdout)
+
+	NonArgsTest(28, exer.TasksServer)
 }
