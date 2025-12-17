@@ -14,7 +14,7 @@ import (
 
 // create a log that writes to multiple destinations - A FILE and THE CONSOLE
 func Logger(txt, filePath string, i io.Writer) error {
-	file, err := os.OpenFile(filePath, os.O_APPEND|os.O_CREATE|os.O_RDWR, 0666)
+	file, err := os.OpenFile(filePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
 	if err != nil {
 		log.Fatalf("Failed to open file %s", filePath)
 	}
