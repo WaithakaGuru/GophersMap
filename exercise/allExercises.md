@@ -69,7 +69,7 @@ Define and use a custom error type.
 ## [23. Interface for Shape](23interfaces.go)
 Create an interface `Shape` with `Area()` and `Perimeter()` methods. Implement for `Circle` and `Rectangle`.
 
-## [24. Sorting a Slice]()
+## [24. Sorting a Slice](24sortSlice.go)
 Sort a slice of structs by a field (e.g., age).
 
 ## [25. Dependency Injection]()
