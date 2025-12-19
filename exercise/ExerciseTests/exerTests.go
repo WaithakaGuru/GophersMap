@@ -6,7 +6,6 @@ package main
 
 import (
 	"fmt"
-	"os"
 
 	exer "github.com/WaithakaGuru/gophersmap/exercise"
 )
@@ -89,13 +88,13 @@ func main() {
 	// the data is too huge clogging the terminal
 	// NonArgsTest(16, exer.GetUsers)
 
-	NonArgsTest(17, exer.RunConcurrent)
+	// NonArgsTest(17, exer.RunConcurrent)
 
-	NonArgsTest(18, exer.HandleChannels)
+	// NonArgsTest(18, exer.HandleChannels)
 
-	NonArgsTest(19, exer.HandleIncrements)
+	// NonArgsTest(19, exer.HandleIncrements)
 
-	NonArgsTest(20, exer.CounterIncrementHandler)
+	// NonArgsTest(20, exer.CounterIncrementHandler)
 
 	testInfo(21)
 	fmt.Println(exer.CheckNegative(-25))
@@ -120,8 +119,10 @@ func main() {
 	NonArgsTest(26, exer.LoadEnv)
 	exer.LoadEnv()
 
+	// commented since it writes to file
 	testInfo(27)
-	exer.Logger("Today is a good day", "simpleLogger.txt", os.Stdout)
+	// exer.Logger("Today is a good day", "simpleLogger.txt", os.Stdout)
 
+	// commented since it creates a serve which is a blocking operation
 	NonArgsTest(28, exer.TasksServer)
 }
