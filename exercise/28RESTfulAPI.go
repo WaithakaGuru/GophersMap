@@ -86,9 +86,7 @@ func addTask(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	ta := task{}
-	err := json.NewDecoder(r.Body).Decode(&ta)
-
-	if err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&ta); err != nil {
 		http.Error(
 			w, err.Error(), http.StatusBadRequest,
 		)
@@ -153,19 +151,47 @@ func deleteTask(w http.ResponseWriter, r *http.Request) {
 }
 
 // func to handle task status updating
-// func updateTask(w http.ResponseWriter, r *http.Request) {
-// 	w.Header().Set("Content-Type", "application/json")
+func updateTaskStatus(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 
-// 	taskIdToUpdate, err :=  strconv.Atoi(r.PathValue("id"))
-// 	if err != nil {
-// 		http.Error(w, err.Error(), http.StatusBadRequest)
-// 		return
-// 	}
-// 	newTask := task{}
+	taskId, err := strconv.Atoi(r.PathValue("id"))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
 
-// 	decodeError := json.NewDecoder(r.Body).Decode(&newTask)
+	type status struct {
+		Complete bool `json:"complete"`
+	}
+	newTaskStatus := status{}
 
-// }
+	if decodeError := json.NewDecoder(r.Body).Decode(&newTaskStatus); decodeError != nil {
+		http.Error(w, decodeError.Error(), http.StatusBadRequest)
+	}
+
+	TaskLock.Lock()
+	t := getTasks()
+	ta := *t
+
+	taskToUpdate, found := ta[taskId]
+	if !found {
+		http.Error(w, "Task to be updated was not found!", http.StatusNotModified|http.StatusNotFound)
+	}
+
+	taskToUpdate.Complete = newTaskStatus.Complete
+	ta[taskId] = taskToUpdate
+	t = &ta
+	TaskLock.Unlock()
+
+	tJson, stringfyErr := json.Marshal(&ta)
+	if stringfyErr != nil {
+		http.Error(w, stringfyErr.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write(tJson)
+}
 
 // will use built in http module to create a multiplexer
 func TasksServer() {
@@ -176,7 +202,7 @@ func TasksServer() {
 	mux.HandleFunc("GET /task/{id}", getTask)
 	mux.HandleFunc("POST /task", addTask)
 	mux.HandleFunc("DELETE /task/{id}", deleteTask)
-	// mux.HandleFunc("PATCH /task/{id}", updateTask)
+	mux.HandleFunc("PATCH /task/{id}", updateTaskStatus)
 
 	http.ListenAndServe(":5050", mux)
 }
