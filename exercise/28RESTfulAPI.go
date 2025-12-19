@@ -82,32 +82,40 @@ func getTask(w http.ResponseWriter, r *http.Request) {
 }
 
 // Func to add a task
-// func addTask(w http.ResponseWriter, r *http.Request) {
-// 	w.Header().Set("Content-Type", "application/json")
+func addTask(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 
-// 	ta := task{}
-// 	err := json.NewDecoder(r.Body).Decode(&ta)
+	ta := task{}
+	err := json.NewDecoder(r.Body).Decode(&ta)
 
-// 	if err != nil {
-// 		http.Error(
-// 			w, err.Error(), http.StatusBadRequest,
-// 		)
-// 	}
+	if err != nil {
+		http.Error(
+			w, err.Error(), http.StatusBadRequest,
+		)
+	}
 
-// 	tasks := getTasks()
-// 	ta = *tasks
-// 	TaskLock.Lock()
+	t := getTasks()
+	tasks := *t
 
-// 	tasks
-// 	TaskLock.Unlock()
+	TaskLock.Lock()
+	tasks[len(tasks)+1] = ta
+	t = &tasks
+	TaskLock.Unlock()
 
-// 	tJson, _ := json.Marshal(&tasks)
-// 	w.WriteHeader(http.StatusCreated)
-// 	w.Write(tJson)
-// }
+	tJson, stringfyErr := json.Marshal(&tasks)
+	if stringfyErr != nil {
+		http.Error(w, stringfyErr.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
+	w.Write(tJson)
+}
 
 // func to handle delete endpoint
 func deleteTask(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
 	id, err := strconv.Atoi(r.PathValue("id"))
 	if err != nil {
 		http.Error(
@@ -166,7 +174,7 @@ func TasksServer() {
 	mux.HandleFunc("GET /", hello)
 	mux.HandleFunc("GET /tasks", getAllTasks)
 	mux.HandleFunc("GET /task/{id}", getTask)
-	// mux.HandleFunc("POST /task", addTask)
+	mux.HandleFunc("POST /task", addTask)
 	mux.HandleFunc("DELETE /task/{id}", deleteTask)
 	// mux.HandleFunc("PATCH /task/{id}", updateTask)
 
