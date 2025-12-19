@@ -54,7 +54,31 @@ func getAllTasks(w http.ResponseWriter, r *http.Request) {
 
 // func to get a specific task by its id
 func getTask(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 
+	taskId, idConvertErr := strconv.Atoi(r.PathValue("id"))
+	if idConvertErr != nil {
+		http.Error(w, idConvertErr.Error(), http.StatusBadRequest)
+		return
+	}
+
+	TaskLock.Lock()
+	task, ok := MockTaskDB[taskId]
+	TaskLock.Unlock()
+
+	if !ok {
+		http.Error(w, "Task not found", http.StatusNotFound)
+		return
+	}
+
+	taskStr, err := json.Marshal(task)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusFound)
+	w.Write(taskStr)
 }
 
 // Func to add a task
@@ -90,20 +114,27 @@ func deleteTask(w http.ResponseWriter, r *http.Request) {
 			w, err.Error(), http.StatusBadRequest,
 		)
 	}
-	tasks := []task{}
-	for _, item := range MockTaskDB {
-		if item.Id == id {
-			continue
-		}
-		tasks = append(tasks, item)
+
+	t := getTasks()
+	ta := *t
+	_, found := ta[id]
+	if !found {
+		http.Error(w, "Task to be deleted was not Found", http.StatusBadRequest)
+		return
 	}
+
+	TaskLock.Lock()
+	delete(ta, id)
+	t = &ta
+	TaskLock.Unlock()
 
 	// set JSON params
 	w.Header().Set("Content-Type", "application/json")
 
-	str, stringfyError := json.Marshal(tasks)
+	str, stringfyError := json.Marshal(ta)
 	if stringfyError != nil {
 		http.Error(w, stringfyError.Error(), http.StatusInternalServerError)
+		return
 	}
 
 	// write a successful delete status to the header
