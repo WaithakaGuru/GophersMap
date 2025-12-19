@@ -55,21 +55,13 @@ func getTasks() *map[int]task {
 
 // default/ primary route
 func hello(w http.ResponseWriter, r *http.Request) {
-
 	w.Write([]byte("Welcome to task Controller API"))
 }
 
 // funct to get all tasks
 func getAllTasks(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "Application/json")
-
-	jsString, err := json.Marshal(*getTasks())
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
-
-	w.WriteHeader(http.StatusFound)
-	w.Write(jsString)
+	tasks := getTasks()
+	helperWriteResponse(w, *tasks, http.StatusFound)
 }
 
 // func to get a specific task by its id
@@ -81,7 +73,8 @@ func getTask(w http.ResponseWriter, r *http.Request) {
 	}
 
 	TaskLock.Lock()
-	task, ok := MockTaskDB[taskId]
+	tasks := *getTasks()
+	task, ok := tasks[taskId]
 	TaskLock.Unlock()
 
 	if !ok {
