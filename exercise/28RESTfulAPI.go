@@ -27,6 +27,25 @@ type task struct {
 	Complete bool   `json:"completed"`
 }
 
+// func to help automate the response stringifying and writing
+// Marshals the data and handle any errors that may occur otherwise write response of the new data to the client
+func helperWriteResponse[info map[int]task | task](w http.ResponseWriter, data info, status int) {
+	// set JSON params
+	w.Header().Set("Content-Type", "application/json")
+
+	dataStr, dataStringifyErr := json.Marshal(data)
+	if dataStringifyErr != nil {
+		http.Error(w, dataStringifyErr.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// write a successful http status code to the header
+	w.WriteHeader(status)
+
+	// return the updated body to the client 'browser'
+	w.Write(dataStr)
+}
+
 // func to mimic data fetching from a DB
 func getTasks() *map[int]task {
 	TaskReadLock.RLock()
@@ -36,6 +55,7 @@ func getTasks() *map[int]task {
 
 // default/ primary route
 func hello(w http.ResponseWriter, r *http.Request) {
+
 	w.Write([]byte("Welcome to task Controller API"))
 }
 
@@ -54,8 +74,6 @@ func getAllTasks(w http.ResponseWriter, r *http.Request) {
 
 // func to get a specific task by its id
 func getTask(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-
 	taskId, idConvertErr := strconv.Atoi(r.PathValue("id"))
 	if idConvertErr != nil {
 		http.Error(w, idConvertErr.Error(), http.StatusBadRequest)
@@ -70,15 +88,7 @@ func getTask(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Task not found", http.StatusNotFound)
 		return
 	}
-
-	taskStr, err := json.Marshal(task)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	w.WriteHeader(http.StatusFound)
-	w.Write(taskStr)
+	helperWriteResponse(w, task, http.StatusFound)
 }
 
 // Func to add a task
@@ -100,14 +110,7 @@ func addTask(w http.ResponseWriter, r *http.Request) {
 	t = &tasks
 	TaskLock.Unlock()
 
-	tJson, stringfyErr := json.Marshal(&tasks)
-	if stringfyErr != nil {
-		http.Error(w, stringfyErr.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	w.WriteHeader(http.StatusCreated)
-	w.Write(tJson)
+	helperWriteResponse(w, tasks, http.StatusCreated)
 }
 
 // func to handle delete endpoint
@@ -123,8 +126,7 @@ func deleteTask(w http.ResponseWriter, r *http.Request) {
 
 	t := getTasks()
 	ta := *t
-	_, found := ta[id]
-	if !found {
+	if _, found := ta[id]; !found {
 		http.Error(w, "Task to be deleted was not Found", http.StatusBadRequest)
 		return
 	}
@@ -134,20 +136,7 @@ func deleteTask(w http.ResponseWriter, r *http.Request) {
 	t = &ta
 	TaskLock.Unlock()
 
-	// set JSON params
-	w.Header().Set("Content-Type", "application/json")
-
-	str, stringfyError := json.Marshal(ta)
-	if stringfyError != nil {
-		http.Error(w, stringfyError.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	// write a successful delete status to the header
-	w.WriteHeader(http.StatusNoContent)
-
-	// return the updated body
-	w.Write(str)
+	helperWriteResponse(w, ta, http.StatusNoContent)
 }
 
 // func to handle task status updating
@@ -183,14 +172,7 @@ func updateTaskStatus(w http.ResponseWriter, r *http.Request) {
 	t = &ta
 	TaskLock.Unlock()
 
-	tJson, stringfyErr := json.Marshal(&ta)
-	if stringfyErr != nil {
-		http.Error(w, stringfyErr.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	w.WriteHeader(http.StatusOK)
-	w.Write(tJson)
+	helperWriteResponse(w, ta, http.StatusOK)
 }
 
 // will use built in http module to create a multiplexer
