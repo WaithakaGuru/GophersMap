@@ -16,7 +16,7 @@ import (
 var PORT = 3040
 
 const (
-	MaxUploadSize = 10 << 20
+	MaxUploadSize = 10 << 20 // 10MB
 	UploadPath    = "./uploads"
 )
 
@@ -33,10 +33,10 @@ func hanldeUpload(w http.ResponseWriter, r *http.Request) {
 	// retrieve file from form field "file"
 	file, header, err := r.FormFile("file")
 	if err != nil {
-		http.Error(w, "Invalid file upload", http.StatusBadRequest)
+		s := err.Error() + " Invalid file upload"
+		http.Error(w, s, http.StatusBadRequest)
 		return
 	}
-
 	defer file.Close()
 
 	// create uploads directory if not exists
@@ -64,8 +64,7 @@ func hanldeUpload(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	successStmt := `\n File uploaded successfully %s`
-	fmt.Fprint(w, successStmt, filename)
+	fmt.Fprint(w, "File uploaded successfully -> ", filename)
 }
 
 func StartUploadHandlerServer() {
