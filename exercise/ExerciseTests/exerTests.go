@@ -128,4 +128,8 @@ func main() {
 	// for exercise 29: see the command commentted on code file '29unitTesting_test.go'
 
 	// for exercise 30: see the command commented on code file '30benchmarkTest_test.go'
+
+	// for exercise 33 run this test to spin up the go server
+	// then use the '33.html' UI to upload a file to the server
+	NonArgsTest(33, exer.StartUploadHandlerServer)
 }

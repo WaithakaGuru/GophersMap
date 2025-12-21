@@ -96,7 +96,7 @@ Use `context.WithTimeout` to cancel a long-running operation.
 ## [32. Middleware for HTTP Server]()
 Add a logging middleware to your HTTP server.
 
-## [33. Upload File via HTTP]()
+## [33. Upload File via HTTP](33.html)
 Create an endpoint to upload a file and save it to disk.
 
 ## [34. Consume JSON API]()
