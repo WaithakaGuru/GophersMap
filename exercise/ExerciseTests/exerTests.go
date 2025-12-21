@@ -137,6 +137,11 @@ func main() {
 	// NonArgsTest(33, exer.StartUploadHandlerServer)
 
 	// commented since it is a blocking operation as it starts a http server
+	/*
+		1. Uncomment the commented 'exer.DataAPI' line and comment the 'exer.GetData("http://localhost:3220/data")' then run the file
+		2. after starting the server, comment the 'exer.DataAPI' line (to prevent restating the server), and uncomment the 'exer.GetData("http://localhost:3220/data")' line
+		  then on a new terminal, run the file to get the data from the already running server without closing the first terminal
+	*/
 	// NonArgsTest(34, exer.DataAPI)
-	exer.GetData()
+	exer.GetData("http://localhost:3220/data")
 }
