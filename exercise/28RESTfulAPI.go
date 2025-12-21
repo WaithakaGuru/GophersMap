@@ -29,7 +29,7 @@ type task struct {
 
 // func to help automate the response stringifying and writing
 // Marshals the data and handle any errors that may occur otherwise write response of the new data to the client
-func helperWriteResponse[info map[int]task | task](w http.ResponseWriter, data info, status int) {
+func HelperWriteResponse[info map[int]task | task | any](w http.ResponseWriter, data info, status int) {
 	// set JSON params
 	w.Header().Set("Content-Type", "application/json")
 
@@ -61,7 +61,7 @@ func hello(w http.ResponseWriter, r *http.Request) {
 // funct to get all tasks
 func getAllTasks(w http.ResponseWriter, r *http.Request) {
 	tasks := getTasks()
-	helperWriteResponse(w, *tasks, http.StatusFound)
+	HelperWriteResponse(w, *tasks, http.StatusFound)
 }
 
 // func to get a specific task by its id
@@ -81,7 +81,7 @@ func getTask(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Task not found", http.StatusNotFound)
 		return
 	}
-	helperWriteResponse(w, task, http.StatusFound)
+	HelperWriteResponse(w, task, http.StatusFound)
 }
 
 // Func to add a task
@@ -104,7 +104,7 @@ func addTask(w http.ResponseWriter, r *http.Request) {
 	t = &tasks
 	TaskLock.Unlock()
 
-	helperWriteResponse(w, tasks, http.StatusCreated)
+	HelperWriteResponse(w, tasks, http.StatusCreated)
 }
 
 // func to handle delete endpoint
@@ -130,7 +130,7 @@ func deleteTask(w http.ResponseWriter, r *http.Request) {
 	t = &ta
 	TaskLock.Unlock()
 
-	helperWriteResponse(w, ta, http.StatusNoContent)
+	HelperWriteResponse(w, ta, http.StatusNoContent)
 }
 
 // func to handle task status updating
@@ -166,7 +166,7 @@ func updateTaskStatus(w http.ResponseWriter, r *http.Request) {
 	t = &ta
 	TaskLock.Unlock()
 
-	helperWriteResponse(w, ta, http.StatusOK)
+	HelperWriteResponse(w, ta, http.StatusOK)
 }
 
 // will use built in http module to create a multiplexer

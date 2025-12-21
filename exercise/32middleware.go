@@ -10,6 +10,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 var userInfoMockDB = map[int]user{
@@ -25,6 +26,17 @@ type user struct {
 	UserInfo string `json:"info"`
 }
 
+func logHandlerRuntimeMiddleware(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		// record start time
+		start := time.Now()
+
+		next(w, r)
+		l := log.New(w, "\nTime taken for this http request -> ", log.Flags())
+		l.Println(time.Since(start))
+	}
+}
+
 func checkIdFieldMiddleware(next http.HandlerFunc) http.HandlerFunc {
 
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -33,7 +45,7 @@ func checkIdFieldMiddleware(next http.HandlerFunc) http.HandlerFunc {
 		i := r.PathValue("id")
 		id, err := strconv.Atoi(i)
 		if err != nil {
-			s := err.Error() + " Incorrect request id"
+			s := err.Error() + " -> Incorrect request id"
 			http.Error(w, s, http.StatusBadRequest)
 			return
 		}
@@ -49,8 +61,13 @@ func checkIdFieldMiddleware(next http.HandlerFunc) http.HandlerFunc {
 		}
 		// call the next function if the checks are passed
 		next(w, r)
-
 	}
+}
+
+func getAll(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	HelperWriteResponse(w, userInfoMockDB, http.StatusOK)
 }
 
 func getUserInfo(w http.ResponseWriter, r *http.Request) {
@@ -69,7 +86,7 @@ func StartUserServer() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "This is the simple user server used to implement middleware in Golang")
 	})
-
+	http.HandleFunc("GET /info", logHandlerRuntimeMiddleware(getAll))
 	http.HandleFunc("GET /info/{id}", checkIdFieldMiddleware(getUserInfo))
 
 	log.Fatal(http.ListenAndServe(":4040", nil))
