@@ -99,7 +99,7 @@ Add a logging middleware to your HTTP server.
 ## [33. Upload File via HTTP](33.html)
 Create an endpoint to upload a file and save it to disk.
 
-## [34. Consume JSON API]()
+## [34. Consume JSON API](34JSONAPIconsumer.go)
 Consume a JSON API, parse the response, and display selected fields.
 
 ## [35. Concurrent Web Scraper]()
