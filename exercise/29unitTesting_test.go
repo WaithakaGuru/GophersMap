@@ -19,6 +19,6 @@ func TestPalindrome(t *testing.T) {
 	expected := true
 
 	if got != expected {
-		t.Fatalf("test failed: expected %v but got %v", expected, got)
+		t.Errorf("test failed: expected %v but got %v", expected, got)
 	}
 }
