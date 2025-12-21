@@ -85,16 +85,16 @@ func main() {
 	// commented since it is a blocking function
 	// NonArgsTest(15, exer.CreateServer)
 
-	// the data is too huge clogging the terminal
+	// commented because the data is too huge clogging the terminal
 	// NonArgsTest(16, exer.GetUsers)
 
-	// NonArgsTest(17, exer.RunConcurrent)
+	NonArgsTest(17, exer.RunConcurrent)
 
-	// NonArgsTest(18, exer.HandleChannels)
+	NonArgsTest(18, exer.HandleChannels)
 
-	// NonArgsTest(19, exer.HandleIncrements)
+	NonArgsTest(19, exer.HandleIncrements)
 
-	// NonArgsTest(20, exer.CounterIncrementHandler)
+	NonArgsTest(20, exer.CounterIncrementHandler)
 
 	testInfo(21)
 	fmt.Println(exer.CheckNegative(-25))
@@ -136,7 +136,7 @@ func main() {
 	// then use the '33.html' UI to upload a file to the server
 	// NonArgsTest(33, exer.StartUploadHandlerServer)
 
-	// commented since it is a blocking operation as it starts a http server
+	// 'NonArgsTest(34, exer.DataAPI)' is commented since it is a blocking operation as it starts a http server
 	/*
 		1. Uncomment the commented 'exer.DataAPI' line and comment the 'exer.GetData("http://localhost:3220/data")' then run the file
 		2. after starting the server, comment the 'exer.DataAPI' line (to prevent restating the server), and uncomment the 'exer.GetData("http://localhost:3220/data")' line

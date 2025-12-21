@@ -83,8 +83,8 @@ Here are some of the exercises you'll find in the `exercise/` folder:
 
 ---
 
-## 📄 About allExercises.md
-The file [`allExercises.md`](./allExercises.md) contains a curated list of 35 exercises, ranging from basic syntax to real-world applications. Use it as your roadmap to master Go, tackling each challenge in order of increasing complexity.
+## 📄 About the 'allExercises.md' file
+The file [`allExercises.md`](exercise/allExercises.md) contains a curated list of 35 exercises, ranging from basic syntax to real-world applications. Use it as your roadmap to master Go, tackling each challenge in order of increasing complexity.
 
 ---
 
