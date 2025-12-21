@@ -129,7 +129,10 @@ func main() {
 
 	// for exercise 30: see the command commented on code file '30benchmarkTest_test.go'
 
+	// commented since its a blocking operation as it creates a 'http server'
+	NonArgsTest(32, exer.StartUserServer)
+
 	// for exercise 33 run this test to spin up the go server
 	// then use the '33.html' UI to upload a file to the server
-	NonArgsTest(33, exer.StartUploadHandlerServer)
+	// NonArgsTest(33, exer.StartUploadHandlerServer)
 }

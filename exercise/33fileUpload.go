@@ -13,11 +13,10 @@ import (
 	"path/filepath"
 )
 
-var PORT = 3040
-
 const (
 	MaxUploadSize = 10 << 20 // 10MB
 	UploadPath    = "./uploads"
+	PORT          = 3040
 )
 
 func hanldeUpload(w http.ResponseWriter, r *http.Request) {

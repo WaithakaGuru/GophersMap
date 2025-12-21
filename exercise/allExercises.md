@@ -93,7 +93,7 @@ Benchmark a function using Go's testing package.
 ## [31. Context with Timeout]()
 Use `context.WithTimeout` to cancel a long-running operation.
 
-## [32. Middleware for HTTP Server]()
+## [32. Middleware for HTTP Server](32middleware.go)
 Add a logging middleware to your HTTP server.
 
 ## [33. Upload File via HTTP](33.html)
