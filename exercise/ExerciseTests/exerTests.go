@@ -88,13 +88,13 @@ func main() {
 	// the data is too huge clogging the terminal
 	// NonArgsTest(16, exer.GetUsers)
 
-	NonArgsTest(17, exer.RunConcurrent)
+	// NonArgsTest(17, exer.RunConcurrent)
 
-	NonArgsTest(18, exer.HandleChannels)
+	// NonArgsTest(18, exer.HandleChannels)
 
-	NonArgsTest(19, exer.HandleIncrements)
+	// NonArgsTest(19, exer.HandleIncrements)
 
-	NonArgsTest(20, exer.CounterIncrementHandler)
+	// NonArgsTest(20, exer.CounterIncrementHandler)
 
 	testInfo(21)
 	fmt.Println(exer.CheckNegative(-25))
@@ -117,7 +117,6 @@ func main() {
 	NonArgsTest(25, worker1.DisplayWorkerInfo)
 
 	NonArgsTest(26, exer.LoadEnv)
-	exer.LoadEnv()
 
 	// commented since it writes to file
 	testInfo(27)
@@ -128,4 +127,5 @@ func main() {
 
 	// for exercise 29: see the command commentted on code file '29unitTesting_test.go'
 
+	// for exercise 30: see the command commented on code file '30benchmarkTest_test.go'
 }
