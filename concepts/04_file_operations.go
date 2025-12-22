@@ -35,7 +35,7 @@ import (
 // ============================================================================
 
 func FileReadingWritingDemo() {
-	fmt.Println("\n========== FILE READING & WRITING ==========\n")
+	fmt.Println("\n========== FILE READING & WRITING ==========")
 
 	// 1. Reading entire file
 	fmt.Println("--- Reading Entire File ---")
@@ -118,7 +118,7 @@ func FileReadingWritingDemo() {
 // ============================================================================
 
 func DirectoryOperationsDemo() {
-	fmt.Println("\n========== DIRECTORY OPERATIONS ==========\n")
+	fmt.Println("\n========== DIRECTORY OPERATIONS ==========")
 
 	// 1. Create directory
 	fmt.Println("--- Creating Directories ---")
@@ -198,7 +198,7 @@ func DirectoryOperationsDemo() {
 // ============================================================================
 
 func WalkDirectoryDemo() {
-	fmt.Println("\n========== WALKING DIRECTORY TREES ==========\n")
+	fmt.Println("\n========== WALKING DIRECTORY TREES ==========")
 
 	// Create test directory structure
 	testDir := "test_tree"
@@ -255,7 +255,7 @@ type Companyfs struct {
 }
 
 func JSONOperationsDemo() {
-	fmt.Println("\n========== JSON OPERATIONS ==========\n")
+	fmt.Println("\n========== JSON OPERATIONS ==========")
 
 	// 1. Marshal (Go → JSON)
 	fmt.Println("--- Marshaling (Go to JSON) ---")
@@ -342,7 +342,7 @@ func JSONOperationsDemo() {
 // ============================================================================
 
 func CSVOperationsDemo() {
-	fmt.Println("\n========== CSV OPERATIONS ==========\n")
+	fmt.Println("\n========== CSV OPERATIONS ==========")
 
 	// 1. Writing CSV
 	fmt.Println("--- Writing CSV ---")
@@ -440,7 +440,7 @@ func SaveConfig(filename string, config *AppConfig) error {
 }
 
 func ConfigManagementDemo() {
-	fmt.Println("\n========== PRACTICAL EXAMPLE: Config Management ==========\n")
+	fmt.Println("\n========== PRACTICAL EXAMPLE: Config Management ==========")
 
 	// Create a config
 	config := &AppConfig{
@@ -492,5 +492,5 @@ func RunFileSystemExamples() {
 
 	fmt.Println("\n╔════════════════════════════════════════════════════════╗")
 	fmt.Println("║      FILE SYSTEM MASTERY - MANAGE DATA LIKE A PRO!      ║")
-	fmt.Println("╚════════════════════════════════════════════════════════╝\n")
+	fmt.Println("╚════════════════════════════════════════════════════════╝")
 }

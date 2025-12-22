@@ -35,7 +35,7 @@ ERROR INTERFACE:
 */
 
 func ErrorInterfaceDemo() {
-	fmt.Println("\n========== ERROR INTERFACE ==========\n")
+	fmt.Println("\n========== ERROR INTERFACE ==========")
 
 	// Simple errors
 	err1 := errors.New("something went wrong")
@@ -113,11 +113,11 @@ func ValidateEmail(email string) error {
 // Helper function
 func contains(s, substr string) bool {
 	return len(s) > 0 && len(substr) > 0 &&
-		(substr[0] >= 0 && s[0] >= 0) // Simplified for demo
+		(substr[0] >= 1 && s[0] >= 1) // Simplified for demo
 }
 
 func CustomErrorsDemo() {
-	fmt.Println("\n========== CUSTOM ERRORS ==========\n")
+	fmt.Println("\n========== CUSTOM ERRORS ==========")
 
 	// Valid email
 	err := ValidateEmail("user@example.com")
@@ -183,7 +183,7 @@ func ProcessData(input string) error {
 }
 
 func ErrorWrappingDemo() {
-	fmt.Println("\n========== ERROR WRAPPING ==========\n")
+	fmt.Println("\n========== ERROR WRAPPING ==========")
 
 	// Successful case
 	err := ProcessData("42")
@@ -284,7 +284,7 @@ func ProcessFile() error {
 }
 
 func ErrorPatternsDemo() {
-	fmt.Println("\n========== ERROR PATTERNS ==========\n")
+	fmt.Println("\n========== ERROR PATTERNS ==========")
 
 	// Pattern 1
 	result, err := DivideNumbers(10, 2)
@@ -294,7 +294,7 @@ func ErrorPatternsDemo() {
 		fmt.Printf("10 / 2 = %.2f\n", result)
 	}
 
-	result, err = DivideNumbers(10, 0)
+	_, err = DivideNumbers(10, 0)
 	if err != nil {
 		fmt.Println("Error:", err)
 	}
@@ -346,7 +346,7 @@ func SafeOperation(shouldFail bool) (result string) {
 }
 
 func PanicRecoverDemo() {
-	fmt.Println("\n========== PANIC AND RECOVER ==========\n")
+	fmt.Println("\n========== PANIC AND RECOVER ==========")
 
 	result := SafeOperation(false)
 	fmt.Printf("Result: %s\n", result)
@@ -411,7 +411,7 @@ func ValidateUser(user User) error {
 }
 
 func PracticalErrorHandlingDemo() {
-	fmt.Println("\n========== PRACTICAL EXAMPLE: Form Validation ==========\n")
+	fmt.Println("\n========== PRACTICAL EXAMPLE: Form Validation ==========")
 
 	// Valid user
 	user1 := User{Name: "Alice", Email: "alice@example.com", Age: 25}
@@ -455,7 +455,7 @@ func PracticalErrorHandlingDemo() {
 */
 
 func BEST_PRACTICES() {
-	fmt.Println(`
+	s := `
 ERROR HANDLING BEST PRACTICES:
 
 ✓ DO:
@@ -475,7 +475,8 @@ ERROR HANDLING BEST PRACTICES:
   - Create error hierarchies
   - Catch all errors indiscriminately
   - Use errors for control flow
-`)
+`
+	fmt.Println(s)
 }
 
 // ============================================================================
@@ -497,5 +498,5 @@ func RunErrorHandlingExamples() {
 
 	fmt.Println("\n╔════════════════════════════════════════════════════════╗")
 	fmt.Println("║     ERROR HANDLING MASTERY - BUILD ROBUST CODE!        ║")
-	fmt.Println("╚════════════════════════════════════════════════════════╝\n")
+	fmt.Println("╚════════════════════════════════════════════════════════╝")
 }

@@ -4,7 +4,7 @@ import "fmt"
 
 // PrintFinalSummary displays a comprehensive summary of the entire curriculum
 func PrintFinalSummary() {
-	fmt.Println(`
+	s := `
 ╔════════════════════════════════════════════════════════════════════════╗
 ║                                                                        ║
 ║         🎓 GO COMPREHENSIVE LEARNING CURRICULUM CREATED 🎓             ║
@@ -293,5 +293,6 @@ Your Skills:            Competitive advantage in development
                     YOU ARE READY TO MASTER GO!
 
 ═════════════════════════════════════════════════════════════════════════
-`)
+`
+	fmt.Println(s)
 }

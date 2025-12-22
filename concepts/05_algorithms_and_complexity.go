@@ -46,7 +46,7 @@ O(log n) - Logarithmic space (recursion depth)
 */
 
 func ComplexityDemo() {
-	fmt.Println("\n========== BIG O COMPLEXITY ANALYSIS ==========\n")
+	fmt.Println("\n========== BIG O COMPLEXITY ANALYSIS ==========")
 
 	fmt.Println("Time Complexity Examples:")
 	fmt.Println("  O(1) - Array access: arr[5]")
@@ -176,7 +176,7 @@ func merge(left, right []int) []int {
 }
 
 func SortingAlgorithmsDemo() {
-	fmt.Println("\n========== SORTING ALGORITHMS ==========\n")
+	fmt.Println("\n========== SORTING ALGORITHMS ==========")
 
 	data := []int{64, 34, 25, 12, 22, 11, 90, 88, 45, 50}
 	fmt.Printf("Original: %v\n\n", data)
@@ -262,7 +262,7 @@ func BinarySearchRecursive(arr []int, target, left, right int) int {
 }
 
 func SearchingAlgorithmsDemo() {
-	fmt.Println("\n========== SEARCHING ALGORITHMS ==========\n")
+	fmt.Println("\n========== SEARCHING ALGORITHMS ==========")
 
 	unsorted := []int{64, 34, 25, 12, 22, 11, 90, 88, 45, 50}
 	sorted := []int{11, 12, 22, 25, 34, 45, 50, 64, 88, 90}
@@ -349,7 +349,7 @@ func (p PersonSlice) Swap(i, j int) {
 }
 
 func CustomSortingDemo() {
-	fmt.Println("\n========== CUSTOM SORTING ==========\n")
+	fmt.Println("\n========== CUSTOM SORTING ==========")
 
 	people := PersonSlice{
 		{Name: "Alice", Age: 28},
@@ -405,7 +405,7 @@ func FindKLargest(arr []int, k int) []int {
 }
 
 func PracticalAlgorithmDemo() {
-	fmt.Println("\n========== PRACTICAL EXAMPLE: K Largest Elements ==========\n")
+	fmt.Println("\n========== PRACTICAL EXAMPLE: K Largest Elements ==========")
 
 	data := []int{64, 34, 25, 12, 22, 11, 90, 88, 45, 50}
 	k := 3
@@ -436,5 +436,5 @@ func RunAlgorithmExamples() {
 
 	fmt.Println("\n╔════════════════════════════════════════════════════════╗")
 	fmt.Println("║       ALGORITHMS MASTERY - WRITE EFFICIENT CODE!       ║")
-	fmt.Println("╚════════════════════════════════════════════════════════╝\n")
+	fmt.Println("╚════════════════════════════════════════════════════════╝")
 }

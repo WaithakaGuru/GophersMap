@@ -51,7 +51,7 @@ func printNumbers(name string, count int) {
 }
 
 func GoroutinesBasicsDemo() {
-	fmt.Println("\n========== GOROUTINES BASICS ==========\n")
+	fmt.Println("\n========== GOROUTINES BASICS ==========")
 
 	fmt.Println("--- Sequential Execution (Slow) ---")
 	start := time.Now()
@@ -112,7 +112,7 @@ func channelSender(ch chan string, count int) {
 }
 
 func ChannelsBasicsDemo() {
-	fmt.Println("\n========== CHANNELS BASICS ==========\n")
+	fmt.Println("\n========== CHANNELS BASICS ==========")
 
 	// 1. Unbuffered channel
 	fmt.Println("--- Unbuffered Channel ---")
@@ -176,7 +176,7 @@ func workerTask(id int, wg *sync.WaitGroup) {
 }
 
 func WaitGroupDemo() {
-	fmt.Println("\n========== WAITGROUP ==========\n")
+	fmt.Println("\n========== WAITGROUP ==========")
 
 	var wg sync.WaitGroup
 
@@ -299,7 +299,7 @@ func RaceConditionChannelSolution() {
 }
 
 func RaceConditionDemo() {
-	fmt.Println("\n========== RACE CONDITIONS ==========\n")
+	fmt.Println("\n========== RACE CONDITIONS ==========")
 
 	RaceConditionProblemDemo()
 	RaceConditionMutexSolution()
@@ -343,7 +343,7 @@ func fixedFunction(ch chan int) {
 }
 
 func GoroutineLeaksDemo() {
-	fmt.Println("\n========== GOROUTINE LEAKS ==========\n")
+	fmt.Println("\n========== GOROUTINE LEAKS ==========")
 
 	fmt.Println("--- Example: Fixed with Timeout ---")
 	ch := make(chan int)
@@ -472,7 +472,7 @@ func workerPoolDemo() {
 }
 
 func PatternsDemo() {
-	fmt.Println("\n========== CONCURRENCY PATTERNS ==========\n")
+	fmt.Println("\n========== CONCURRENCY PATTERNS ==========")
 
 	producerConsumerDemo()
 	fanOutFanInDemo()
@@ -486,7 +486,7 @@ func PatternsDemo() {
 // ============================================================================
 
 func CONCURRENCY_BEST_PRACTICES() {
-	fmt.Println(`
+	s := `
 CONCURRENCY BEST PRACTICES:
 
 1. GOROUTINES:
@@ -525,7 +525,8 @@ CONCURRENCY BEST PRACTICES:
   ✗ Don't over-complicate with too many patterns
 
 KEY RULE: "Don't communicate by sharing memory; share memory by communicating"
-`)
+`
+	fmt.Println(s)
 }
 
 // ============================================================================
@@ -547,5 +548,5 @@ func RunConcurrencyExamples() {
 
 	fmt.Println("\n╔════════════════════════════════════════════════════════╗")
 	fmt.Println("║  CONCURRENCY MASTERY - BUILD POWERFUL GO PROGRAMS!     ║")
-	fmt.Println("╚════════════════════════════════════════════════════════╝\n")
+	fmt.Println("╚════════════════════════════════════════════════════════╝")
 }
