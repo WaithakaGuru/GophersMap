@@ -11,12 +11,13 @@ import (
 	// E "godotenv"
 
 	"os"
+
+	E "github.com/joho/godotenv"
 )
 
 func LoadEnv() {
 	// use a third party package to load the env
-	// E.Load()
-
+	E.Load(".env")
 	// use os package to get the env
 	port, found := os.LookupEnv("PORT")
 	if !found {

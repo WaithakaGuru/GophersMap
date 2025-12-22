@@ -113,9 +113,8 @@ func deleteTask(w http.ResponseWriter, r *http.Request) {
 
 	id, err := strconv.Atoi(r.PathValue("id"))
 	if err != nil {
-		http.Error(
-			w, err.Error(), http.StatusBadRequest,
-		)
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
 
 	t := getTasks()

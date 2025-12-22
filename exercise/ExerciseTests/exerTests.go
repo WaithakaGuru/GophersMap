@@ -94,7 +94,9 @@ func main() {
 
 	NonArgsTest(19, exer.HandleIncrements)
 
-	NonArgsTest(20, exer.CounterIncrementHandler)
+	NonArgsTest(19, exer.CounterIncrementHandler)
+
+	NonArgsTest(20, exer.RunTimerAndTickerExamples)
 
 	testInfo(21)
 	fmt.Println(exer.CheckNegative(-25))
