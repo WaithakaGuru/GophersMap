@@ -146,4 +146,6 @@ func main() {
 	*/
 	// NonArgsTest(34, exer.DataAPI)
 	exer.GetData("http://localhost:3220/data")
+
+	NonArgsTest(35, exer.WebScraper)
 }

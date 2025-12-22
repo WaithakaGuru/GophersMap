@@ -589,7 +589,7 @@ func RunWebScraperExamples() {
 	DemoWorkerPool()
 
 	fmt.Println("\n╔════════════════════════════════════════════════════════╗")
-	fmt.Println("║             KEY TAKEAWAYS - WEB SCRAPER                 ║")
+	fmt.Println("║             KEY TAKEAWAYS - WEB SCRAPER                ║")
 	fmt.Println("╚════════════════════════════════════════════════════════╝")
 
 	takeaways := `
@@ -618,7 +618,7 @@ IMPORTANT PATTERNS:
 	fmt.Println(takeaways)
 
 	fmt.Println("\n╔════════════════════════════════════════════════════════╗")
-	fmt.Println("║                 ALL EXAMPLES COMPLETE                   ║")
+	fmt.Println("║                 ALL EXAMPLES COMPLETE                  ║")
 	fmt.Println("╚════════════════════════════════════════════════════════╝")
 }
 
