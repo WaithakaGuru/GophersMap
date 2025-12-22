@@ -52,7 +52,7 @@ type ScraperConfig struct {
 
 func basicSequentialScraper(urls []string) []ScrapedData {
 	fmt.Println("\n========== SEQUENTIAL SCRAPER ==========")
-	fmt.Println("Fetching URLs one at a time (SLOW)...\n")
+	fmt.Println("Fetching URLs one at a time (SLOW)...")
 
 	var results []ScrapedData
 	startTime := time.Now()
@@ -81,7 +81,7 @@ func basicSequentialScraper(urls []string) []ScrapedData {
 
 func simpleConcurrentScraper(urls []string) []ScrapedData {
 	fmt.Println("\n========== SIMPLE CONCURRENT SCRAPER ==========")
-	fmt.Println("Fetching URLs concurrently (FAST)...\n")
+	fmt.Println("Fetching URLs concurrently (FAST)...")
 
 	// Create a channel to receive results
 	// Buffered channel with capacity for all URLs
@@ -120,7 +120,7 @@ func simpleConcurrentScraper(urls []string) []ScrapedData {
 
 func advancedConcurrentScraper(urls []string) []ScrapedData {
 	fmt.Println("\n========== ADVANCED CONCURRENT SCRAPER (WaitGroup) ==========")
-	fmt.Println("Using sync.WaitGroup for proper synchronization...\n")
+	fmt.Println("Using sync.WaitGroup for proper synchronization...")
 
 	// sync.WaitGroup coordinates goroutines
 	// Useful when you don't know exact count beforehand
@@ -549,7 +549,7 @@ func (wp *WorkerPool) Wait() []ScrapedData {
 func DemoWorkerPool() {
 	fmt.Println("\n╔════════════════════════════════════════════════════════╗")
 	fmt.Println("║           WORKER POOL PATTERN DEMONSTRATION            ║")
-	fmt.Println("╚════════════════════════════════════════════════════════╝\n")
+	fmt.Println("╚════════════════════════════════════════════════════════╝")
 
 	urls := []string{
 		"https://www.example.com",
@@ -592,7 +592,7 @@ func RunWebScraperExamples() {
 	fmt.Println("║             KEY TAKEAWAYS - WEB SCRAPER                 ║")
 	fmt.Println("╚════════════════════════════════════════════════════════╝")
 
-	fmt.Println(`
+	takeaways := `
 PATTERNS DEMONSTRATED:
 1. Sequential: Simple but slow
 2. Goroutines + Channels: Concurrent but uncontrolled
@@ -614,11 +614,12 @@ IMPORTANT PATTERNS:
 - Always defer resource cleanup
 - Use buffered channels when you know the size
 - Use worker pools for production applications
-`)
+`
+	fmt.Println(takeaways)
 
 	fmt.Println("\n╔════════════════════════════════════════════════════════╗")
 	fmt.Println("║                 ALL EXAMPLES COMPLETE                   ║")
-	fmt.Println("╚════════════════════════════════════════════════════════╝\n")
+	fmt.Println("╚════════════════════════════════════════════════════════╝")
 }
 
 // WebScraper is the legacy function name
