@@ -380,7 +380,7 @@ package concepts
 import "fmt"
 
 func PrintCurriculumFinal() {
-	fmt.Println(`
+	s := `
 ╔════════════════════════════════════════════════════════════════════════╗
 ║                                                                        ║
 ║         GO COMPREHENSIVE LEARNING CURRICULUM - COMPLETE ✓              ║
@@ -492,5 +492,6 @@ Keep pushing. Keep building. Keep learning.
 The Go community believes in you! 🚀
 
 ════════════════════════════════════════════════════════════════════════
-`)
+`
+	fmt.Println(s)
 }
