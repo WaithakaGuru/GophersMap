@@ -24,7 +24,7 @@ import (
 
 func basicLongOperation() {
 	fmt.Println("\n========== BASIC LONG OPERATION (No Context) ==========")
-	fmt.Println("Running 10 iterations, each takes 1 second...\n")
+	fmt.Println("Running 10 iterations, each takes 1 second...")
 
 	count := 0
 	for range 10 {
@@ -42,7 +42,7 @@ func basicLongOperation() {
 
 func contextAwareLongOperation(ctx context.Context, operationName string) error {
 	fmt.Printf("\n========== %s (Context-Aware) ==========\n", operationName)
-	fmt.Println("Running operation with context timeout...\n")
+	fmt.Println("Running operation with context timeout...")
 
 	count := 0
 	// Run the operation in a loop, checking context at each iteration
@@ -87,7 +87,7 @@ func DemoWithTimeout() {
 	defer cancel()
 
 	fmt.Println("\nContext created with 5 second timeout")
-	fmt.Println("Operation will run until timeout or completion\n")
+	fmt.Println("Operation will run until timeout or completion")
 
 	// Pass the timeout context to the operation
 	// The operation will stop when timeout occurs OR completes
@@ -112,7 +112,7 @@ func multipleOperationsWithTimeout() {
 	timeoutCtx, cancel := context.WithTimeout(ctx, 6*time.Second)
 	defer cancel()
 
-	fmt.Println("\nStarting 2 operations with shared 6 second timeout\n")
+	fmt.Println("\nStarting 2 operations with shared 6 second timeout")
 
 	// Channel to collect results
 	done := make(chan string, 2)
@@ -165,7 +165,7 @@ func DemoWithDeadline() {
 	defer cancel()
 
 	fmt.Printf("\nDeadline set to: %v\n", deadline.Format("15:04:05"))
-	fmt.Println("Operation will run until deadline is reached\n")
+	fmt.Println("Operation will run until deadline is reached")
 
 	err := contextAwareLongOperation(deadlineCtx, "OPERATION WITH DEADLINE")
 	if err != nil {
@@ -340,7 +340,7 @@ func RunContextExamples() {
 
 	fmt.Println("\n╔════════════════════════════════════════════════════════╗")
 	fmt.Println("║                ALL EXAMPLES COMPLETE                   ║")
-	fmt.Println("╚════════════════════════════════════════════════════════╝\n")
+	fmt.Println("╚════════════════════════════════════════════════════════╝")
 }
 
 // Legacy function for compatibility
