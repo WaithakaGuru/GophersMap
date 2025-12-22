@@ -23,7 +23,7 @@ import (
 
 func DemoTimer() {
 	fmt.Println("\n========== TIMER DEMO ==========")
-	fmt.Println("Timer fires ONCE after a specified duration\n")
+	fmt.Println("Timer fires ONCE after a specified duration")
 
 	// Create a timer that will fire after 3 seconds
 	// Timer has a channel that will receive the time.Time when it fires
@@ -63,7 +63,7 @@ func DemoTimer() {
 
 func DemoTicker() {
 	fmt.Println("\n========== TICKER DEMO ==========")
-	fmt.Println("Ticker fires REPEATEDLY at fixed intervals\n")
+	fmt.Println("Ticker fires REPEATEDLY at fixed intervals")
 
 	// Create a ticker that fires every 1 second
 	// Ticker sends the current time on its channel each interval
@@ -72,7 +72,7 @@ func DemoTicker() {
 	// IMPORTANT: Always defer Stop() to clean up the goroutine
 	defer ticker.Stop()
 
-	fmt.Println("Ticker started. Firing every 1 second...\n")
+	fmt.Println("Ticker started. Firing every 1 second...")
 
 	// We'll collect 5 tick events then stop
 	tickCount := 0
@@ -97,7 +97,7 @@ func DemoTicker() {
 
 func DemoTimerWithSelect() {
 	fmt.Println("\n========== TIMER WITH SELECT ==========")
-	fmt.Println("Non-blocking timer using select statement\n")
+	fmt.Println("Non-blocking timer using select statement")
 
 	timer := time.NewTimer(2 * time.Second)
 	defer timer.Stop()
@@ -126,7 +126,7 @@ func DemoTimerWithSelect() {
 
 func DemoTickerWithSelect() {
 	fmt.Println("\n========== TICKER WITH SELECT ==========")
-	fmt.Println("Non-blocking ticker using select statement\n")
+	fmt.Println("Non-blocking ticker using select statement")
 
 	ticker := time.NewTicker(500 * time.Millisecond)
 	defer ticker.Stop()
@@ -173,7 +173,7 @@ type HealthStatus struct {
 
 func DemoHealthCheckMonitor() {
 	fmt.Println("\n========== HEALTH CHECK MONITOR ==========")
-	fmt.Println("Periodic health check every 1 second\n")
+	fmt.Println("Periodic health check every 1 second")
 
 	// Create a ticker for health checks every 1 second
 	healthTicker := time.NewTicker(1 * time.Second)
@@ -239,7 +239,7 @@ func performHealthCheck(t time.Time) HealthStatus {
 
 func DemoTimerReset() {
 	fmt.Println("\n========== TIMER RESET ==========")
-	fmt.Println("Resetting a timer to extend/change its duration\n")
+	fmt.Println("Resetting a timer to extend/change its duration")
 
 	timer := time.NewTimer(2 * time.Second)
 	defer timer.Stop()
@@ -304,7 +304,7 @@ func RunTimerAndTickerExamples() {
 
 	fmt.Println("\n╔════════════════════════════════════════════════════════════╗")
 	fmt.Println("║                    ALL EXAMPLES COMPLETE                    ║")
-	fmt.Println("╚════════════════════════════════════════════════════════════╝\n")
+	fmt.Println("╚════════════════════════════════════════════════════════════╝")
 }
 
 // Legacy function for compatibility
