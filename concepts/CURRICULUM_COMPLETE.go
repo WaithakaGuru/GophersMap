@@ -390,7 +390,7 @@ package concepts
 import "fmt"
 
 func ShowCompleteCurriculumInfo() {
-	fmt.Println(`
+	s := `
 ╔════════════════════════════════════════════════════════════════════════╗
 ║                                                                        ║
 ║     YOU NOW HAVE A COMPLETE GO LEARNING CURRICULUM!                  ║
@@ -450,5 +450,6 @@ do. Keep that up. You're building the right foundation.
 Go build something amazing!
 
 ════════════════════════════════════════════════════════════════════════
-`)
+`
+	fmt.Println(s)
 }
