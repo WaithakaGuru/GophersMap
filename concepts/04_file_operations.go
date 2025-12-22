@@ -241,17 +241,17 @@ func WalkDirectoryDemo() {
 // 4. JSON OPERATIONS - Very Common in Go
 // ============================================================================
 
-type Person struct {
+type Personfs struct {
 	Name  string `json:"name"`
 	Age   int    `json:"age"`
 	Email string `json:"email"`
 	City  string `json:"city"`
 }
 
-type Company struct {
-	Name      string   `json:"name"`
-	Founded   int      `json:"founded"`
-	Employees []Person `json:"employees"`
+type Companyfs struct {
+	Name      string     `json:"name"`
+	Founded   int        `json:"founded"`
+	Employees []Personfs `json:"employees"`
 }
 
 func JSONOperationsDemo() {
@@ -298,10 +298,10 @@ func JSONOperationsDemo() {
 	// 3. Working with files
 	fmt.Println("\n--- JSON File Operations ---")
 
-	company := Company{
+	company := Companyfs{
 		Name:    "TechCorp",
 		Founded: 2010,
-		Employees: []Person{
+		Employees: []Personfs{
 			{Name: "Alice", Age: 28, Email: "alice@techcorp.com", City: "Nairobi"},
 			{Name: "Bob", Age: 35, Email: "bob@techcorp.com", City: "Mombasa"},
 		},
@@ -325,7 +325,7 @@ func JSONOperationsDemo() {
 		return
 	}
 
-	var loadedCompany Company
+	var loadedCompany Companyfs
 	err = json.Unmarshal(fileData, &loadedCompany)
 	if err != nil {
 		fmt.Println("Error:", err)

@@ -34,7 +34,7 @@ ARRAYS:
 */
 
 func ArraysDemo() {
-	fmt.Println("\n========== ARRAYS ==========\n")
+	fmt.Println("\n========== ARRAYS ==========")
 
 	// Array declaration with size
 	var numbers [5]int
@@ -91,7 +91,7 @@ KEY CONCEPTS:
 */
 
 func SlicesDemo() {
-	fmt.Println("\n========== SLICES ==========\n")
+	fmt.Println("\n========== SLICES ==========")
 
 	// 1. Creating slices
 	fmt.Println("--- Creating Slices ---")
@@ -180,7 +180,7 @@ MAPS:
 */
 
 func MapsDemo() {
-	fmt.Println("\n========== MAPS ==========\n")
+	fmt.Println("\n========== MAPS ==========")
 
 	// 1. Creating maps
 	fmt.Println("--- Creating Maps ---")
@@ -310,7 +310,7 @@ type Company struct {
 }
 
 func StructsDemo() {
-	fmt.Println("\n========== STRUCTS ==========\n")
+	fmt.Println("\n========== STRUCTS ==========")
 
 	// 1. Creating structs
 	fmt.Println("--- Creating Structs ---")
@@ -442,7 +442,7 @@ func (t Temperature) Fahrenheit() float64 {
 }
 
 func MethodsDemo() {
-	fmt.Println("\n========== METHODS ==========\n")
+	fmt.Println("\n========== METHODS ==========")
 
 	person := Person{"Frank", 30, "frank@example.com", "Dar es Salaam"}
 
@@ -516,7 +516,7 @@ func PrintShapeInfo(s Shape, name string) {
 }
 
 func InterfacesDemo() {
-	fmt.Println("\n========== INTERFACES ==========\n")
+	fmt.Println("\n========== INTERFACES ==========")
 
 	rect := Rectangle{Width: 5, Height: 3}
 	circle := Circle{Radius: 4}
@@ -587,7 +587,7 @@ func (tl *TodoList) GetActive() []Todo {
 }
 
 func PracticalExampleDemo() {
-	fmt.Println("\n========== PRACTICAL EXAMPLE: Todo List ==========\n")
+	fmt.Println("\n========== PRACTICAL EXAMPLE: Todo List ==========")
 
 	todoList := TodoList{}
 
@@ -637,5 +637,5 @@ func RunDataStructuresExamples() {
 
 	fmt.Println("\n╔════════════════════════════════════════════════════════╗")
 	fmt.Println("║    DATA STRUCTURES MASTERY - BUILD ANYTHING!           ║")
-	fmt.Println("╚════════════════════════════════════════════════════════╝\n")
+	fmt.Println("╚════════════════════════════════════════════════════════╝")
 }

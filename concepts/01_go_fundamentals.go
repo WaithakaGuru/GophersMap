@@ -35,7 +35,7 @@ VARIABLES:
 */
 
 func VarAndConstantsDemo() {
-	fmt.Println("\n========== VARIABLES & CONSTANTS ==========\n")
+	fmt.Println("\n========== VARIABLES & CONSTANTS ==========")
 
 	// 1. Explicit type declaration
 	var age int = 25
@@ -96,7 +96,7 @@ GO DATA TYPES:
 */
 
 func DataTypesDemo() {
-	fmt.Println("\n========== DATA TYPES IN DEPTH ==========\n")
+	fmt.Println("\n========== DATA TYPES IN DEPTH ==========")
 
 	// INTEGER TYPES
 	fmt.Println("--- INTEGER TYPES ---")
@@ -165,7 +165,7 @@ This prevents subtle bugs that occur in languages with implicit conversions.
 */
 
 func TypeConversionDemo() {
-	fmt.Println("\n========== TYPE CONVERSION ==========\n")
+	fmt.Println("\n========== TYPE CONVERSION ==========")
 
 	// Converting between numeric types
 	var intValue int = 42
@@ -177,6 +177,7 @@ func TypeConversionDemo() {
 
 	// String to numeric
 	var str string = "123"
+	fmt.Println(str)
 	// Note: strconv package is needed for string ↔ number conversion
 	// This is shown in a separate example with imports
 
@@ -259,7 +260,7 @@ func counterFactory() func() int {
 }
 
 func FunctionsDemo() {
-	fmt.Println("\n========== FUNCTIONS ==========\n")
+	fmt.Println("\n========== FUNCTIONS ==========")
 
 	// Basic function
 	result := add(5, 3)
@@ -307,7 +308,7 @@ CONTROL FLOW:
 */
 
 func ControlFlowDemo() {
-	fmt.Println("\n========== CONTROL FLOW ==========\n")
+	fmt.Println("\n========== CONTROL FLOW ==========")
 
 	// IF/ELSE
 	fmt.Println("--- IF/ELSE ---")
@@ -410,7 +411,7 @@ DEFER:
 */
 
 func DeferDemo() {
-	fmt.Println("\n========== DEFER ==========\n")
+	fmt.Println("\n========== DEFER ==========")
 
 	// Basic defer
 	fmt.Println("--- Basic Defer ---")
@@ -475,7 +476,7 @@ func safeDivide(a, b int) (result int) {
 }
 
 func PanicAndRecoverDemo() {
-	fmt.Println("\n========== PANIC AND RECOVER ==========\n")
+	fmt.Println("\n========== PANIC AND RECOVER ==========")
 
 	// Safe division that recovers from panic
 	result1 := safeDivide(10, 2)
@@ -515,7 +516,7 @@ func privateFunction() {
 }
 
 func ScopeDemo() {
-	fmt.Println("\n========== SCOPE AND VISIBILITY ==========\n")
+	fmt.Println("\n========== SCOPE AND VISIBILITY =========")
 
 	// Package-level variable (if declared outside functions)
 	// packageVar := "Package scope"
@@ -581,7 +582,7 @@ func parseAge(ageStr string) (int, error) {
 }
 
 func BestPracticesDemo() {
-	fmt.Println("\n========== BEST PRACTICES ==========\n")
+	fmt.Println("\n========== BEST PRACTICES ==========")
 
 	age, err := parseAge("25")
 	if err != nil {
@@ -620,5 +621,5 @@ func RunFundamentalsExamples() {
 
 	fmt.Println("\n╔════════════════════════════════════════════════════════╗")
 	fmt.Println("║         FUNDAMENTALS MASTERY - YOU'RE READY!           ║")
-	fmt.Println("╚════════════════════════════════════════════════════════╝\n")
+	fmt.Println("╚════════════════════════════════════════════════════════╝")
 }

@@ -52,7 +52,7 @@ If you can work through this curriculum, you'll have a skill set that:
 - Teaches you to write actually maintainable code
 - Separates you from the "tutorial graduates"
 
-**Repository:** [github.com/gophersmap](https://github.com)
+**Repository:** [github.com/gophersmap](https://github.com/WaithakaGuru/gophersmap)
 Located in `/concepts` — start with `00_START_HERE.go` (yes, there's an actual guide)
 
 **Fun Fact:** This project started as code reviews of 35 different exercises. It evolved into something that could actually teach someone Go properly. You can see the full journey in the repo.
