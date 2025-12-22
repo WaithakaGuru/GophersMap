@@ -57,7 +57,7 @@ Use a channel to send and receive data between goroutines.
 ## [19. Mutex for Safe Counter](19mutex.go)
 Create a counter that can be safely incremented by multiple goroutines using a mutex.
 
-## [20. Timer and Ticker]()
+## [20. Timer and Ticker](20timerNTicker.go)
 Demonstrate the use of `time.Timer` and `time.Ticker`.
 
 ## [21. Error Handling](21errorHandling.go)
@@ -102,7 +102,7 @@ Create an endpoint to upload a file and save it to disk.
 ## [34. Consume JSON API](34JSONAPIconsumer.go)
 Consume a JSON API, parse the response, and display selected fields.
 
-## [35. Concurrent Web Scraper]()
+## [35. Concurrent Web Scraper](35webScrapper.go)
 Write a concurrent web scraper that fetches titles from a list of URLs.
 
 ---
