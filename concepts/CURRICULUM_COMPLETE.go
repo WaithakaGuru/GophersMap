@@ -393,15 +393,14 @@ func ShowCompleteCurriculumInfo() {
 	s := `
 ╔════════════════════════════════════════════════════════════════════════╗
 ║                                                                        ║
-║     YOU NOW HAVE A COMPLETE GO LEARNING CURRICULUM!                  ║
+║     YOU NOW HAVE A COMPLETE GO LEARNING CURRICULUM!                    ║                                                                       ║
+║     6 Comprehensive Concept Files                                      ║
+║     3400+ Lines of Code                                                ║
+║     50+ Complete Examples                                              ║
+║     Multiple Real-World Projects                                       ║
 ║                                                                        ║
-║     6 Comprehensive Concept Files                                     ║
-║     3400+ Lines of Code                                               ║
-║     50+ Complete Examples                                             ║
-║     Multiple Real-World Projects                                      ║
-║                                                                        ║
-║     FROM BEGINNER TO ADVANCED TOPICS                                  ║
-║     WITH INCREASING DIFFICULTY AND DEPTH                              ║
+║     FROM BEGINNER TO ADVANCED TOPICS                                   ║
+║     WITH INCREASING DIFFICULTY AND DEPTH                               ║
 ║                                                                        ║
 ╚════════════════════════════════════════════════════════════════════════╝
 

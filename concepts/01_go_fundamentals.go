@@ -35,7 +35,7 @@ VARIABLES:
 */
 
 func VarAndConstantsDemo() {
-	fmt.Println("\n========== VARIABLES & CONSTANTS ==========")
+	fmt.Println("========== VARIABLES & CONSTANTS ==========")
 
 	// 1. Explicit type declaration
 	var age int = 25
@@ -77,7 +77,7 @@ func VarAndConstantsDemo() {
 	// 6. Blank identifier - for unused variables
 	_ = "This value is ignored"
 
-	fmt.Println("\n✓ Variables and Constants demonstrated")
+	fmt.Println("✓ Variables and Constants demonstrated")
 }
 
 // ============================================================================

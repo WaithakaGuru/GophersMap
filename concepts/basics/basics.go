@@ -10,5 +10,27 @@ import (
 
 func main() {
 	fmt.Println("Hello Waithaka")
-	c.PrintCurriculumFinal()
+	// c.PrintCurriculumFinal()
+	// c.ShowCompleteCurriculumInfo()
+	// c.ShowLearningRoadmap()
+	// c.DataTypesDemo()
+	// c.ControlFlowDemo()
+	// c.DeferDemo()
+	// c.PanicAndRecoverDemo()
+
+	// c.RunFundamentalsExamples()
+
+	// c.SlicesDemo()
+
+	// c.SortingAlgorithmsDemo()
+
+	// c.FileReadingWritingDemo()
+
+	// c.WalkDirectoryDemo()
+
+	// c.JSONOperationsDemo()
+
+	// c.CSVOperationsDemo()
+	c.ConfigManagementDemo()
+
 }

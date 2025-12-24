@@ -1,0 +1,11 @@
+{
+  "app_name": "MyApp",
+  "port": 8080,
+  "database_url": "postgresql://localhost/mydb",
+  "features": [
+    "auth",
+    "api",
+    "websocket"
+  ],
+  "max_connections": 100
+}

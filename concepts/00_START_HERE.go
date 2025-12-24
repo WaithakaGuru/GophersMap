@@ -7,7 +7,7 @@ func PrintFinalSummary() {
 	s := `
 ╔════════════════════════════════════════════════════════════════════════╗
 ║                                                                        ║
-║         🎓 GO COMPREHENSIVE LEARNING CURRICULUM CREATED 🎓             ║
+║         🎓 GO COMPREHENSIVE LEARNING CURRICULUM CREATED 🎓            ║
 ║                                                                        ║
 ║              Ready for Mastery Learning and Practice                   ║
 ║                                                                        ║

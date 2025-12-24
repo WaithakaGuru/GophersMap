@@ -258,9 +258,9 @@ func JSONOperationsDemo() {
 	fmt.Println("\n========== JSON OPERATIONS ==========")
 
 	// 1. Marshal (Go → JSON)
-	fmt.Println("--- Marshaling (Go to JSON) ---")
+	fmt.Println("\n--- Marshaling (Go to JSON) ---")
 
-	person := Person{
+	person := Personfs{
 		Name:  "Alice",
 		Age:   28,
 		Email: "alice@example.com",
@@ -287,7 +287,7 @@ func JSONOperationsDemo() {
 
 	jsonString := `{"name":"Bob","age":35,"email":"bob@example.com","city":"Mombasa"}`
 
-	var person2 Person
+	var person2 Personfs
 	err = json.Unmarshal([]byte(jsonString), &person2)
 	if err != nil {
 		fmt.Println("Error unmarshaling:", err)
@@ -491,6 +491,6 @@ func RunFileSystemExamples() {
 	ConfigManagementDemo()
 
 	fmt.Println("\n╔════════════════════════════════════════════════════════╗")
-	fmt.Println("║      FILE SYSTEM MASTERY - MANAGE DATA LIKE A PRO!      ║")
+	fmt.Println("║      FILE SYSTEM MASTERY - MANAGE DATA LIKE A PRO!     ║")
 	fmt.Println("╚════════════════════════════════════════════════════════╝")
 }
