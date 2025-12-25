@@ -225,7 +225,7 @@ func ResponseExample(w http.ResponseWriter, r *http.Request) {
     w.WriteHeader(http.StatusOK)
     
     // Write response body
-    fmt.Fprintf(w, `+"`{\"status\": \"success\"}`+"`")
+    fmt.Fprintf(w, `+"`{\"status\": \"success\"}"`")
     
     // After WriteHeader, you cannot change headers!
 }

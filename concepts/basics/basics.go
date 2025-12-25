@@ -31,6 +31,9 @@ func main() {
 	// c.JSONOperationsDemo()
 
 	// c.CSVOperationsDemo()
-	c.ConfigManagementDemo()
+
+	// c.ConfigManagementDemo()
+
+	c.PatternsDemo()
 
 }

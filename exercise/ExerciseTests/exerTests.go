@@ -145,7 +145,7 @@ func main() {
 		  then on a new terminal, run the file to get the data from the already running server without closing the first terminal
 	*/
 	// NonArgsTest(34, exer.DataAPI)
-	exer.GetData("http://localhost:3220/data")
+	// exer.GetData("http://localhost:3220/data")
 
 	NonArgsTest(35, exer.WebScraper)
 }
