@@ -1,13 +1,14 @@
 package concepts
 
 import (
-	"bufio"
+	_ "bufio"
 	"fmt"
-	"io"
-	"net/http"
+	_ "io"
+	_ "net/http"
 	"net/url"
-	"strings"
-	"time"
+	_ "net/url"
+	_ "strings"
+	_ "time"
 )
 
 // ============================================================================
@@ -138,7 +139,7 @@ data := string(body)
 
 	fmt.Println("\n2. MAKING A POST REQUEST:")
 	fmt.Println(`
-payload := strings.NewReader(`+"`"+`{"name": "John", "age": 30}`+"`"+`)
+payload := strings.NewReader(` + "`" + `{"name": "John", "age": 30}` + "`" + `)
 
 req, err := http.NewRequest(http.MethodPost, 
     "https://api.example.com/users", payload)
@@ -225,7 +226,7 @@ func ResponseExample(w http.ResponseWriter, r *http.Request) {
     w.WriteHeader(http.StatusOK)
     
     // Write response body
-    fmt.Fprintf(w, `+"`{\"status\": \"success\"}"`")
+    fmt.Fprintf(w, ` + "`{\"status\": \"success\"}" + `)
     
     // After WriteHeader, you cannot change headers!
 }
@@ -349,13 +350,13 @@ func URLParsingDemo() {
 	parsedURL, err := url.Parse(urlString)
 	if err == nil {
 		fmt.Println("\nURL Components:")
-		fmt.Printf("  Scheme:   %s\n", parsedURL.Scheme)    // https
-		fmt.Printf("  Host:     %s\n", parsedURL.Host)      // api.example.com:8080
+		fmt.Printf("  Scheme:   %s\n", parsedURL.Scheme)     // https
+		fmt.Printf("  Host:     %s\n", parsedURL.Host)       // api.example.com:8080
 		fmt.Printf("  Hostname: %s\n", parsedURL.Hostname()) // api.example.com
-		fmt.Printf("  Port:     %s\n", parsedURL.Port())    // 8080
-		fmt.Printf("  Path:     %s\n", parsedURL.Path)      // /users/123
-		fmt.Printf("  Query:    %s\n", parsedURL.RawQuery)  // role=admin&active=true
-		fmt.Printf("  Fragment: %s\n", parsedURL.Fragment)  // section
+		fmt.Printf("  Port:     %s\n", parsedURL.Port())     // 8080
+		fmt.Printf("  Path:     %s\n", parsedURL.Path)       // /users/123
+		fmt.Printf("  Query:    %s\n", parsedURL.RawQuery)   // role=admin&active=true
+		fmt.Printf("  Fragment: %s\n", parsedURL.Fragment)   // section
 	}
 
 	fmt.Println("\n2. QUERY PARAMETERS IN HANDLER:")
