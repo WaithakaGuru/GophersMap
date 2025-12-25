@@ -1,12 +1,12 @@
 package concepts
 
 import (
-	"encoding/json"
+	_ "encoding/json"
 	"fmt"
-	"io"
-	"net/http"
-	"strconv"
-	"strings"
+	_ "io"
+	_ "net/http"
+	_ "strconv"
+	_ "strings"
 	"sync"
 )
 
@@ -24,13 +24,13 @@ import (
 
 // Resource represents a sample resource (e.g., Blog Post)
 type Resource struct {
-	ID        int       `json:"id"`
-	Title     string    `json:"title"`
-	Content   string    `json:"content"`
-	Author    string    `json:"author"`
-	Tags      []string  `json:"tags"`
-	CreatedAt string    `json:"created_at"`
-	UpdatedAt string    `json:"updated_at"`
+	ID        int      `json:"id"`
+	Title     string   `json:"title"`
+	Content   string   `json:"content"`
+	Author    string   `json:"author"`
+	Tags      []string `json:"tags"`
+	CreatedAt string   `json:"created_at"`
+	UpdatedAt string   `json:"updated_at"`
 }
 
 // APIResponse wraps all API responses
@@ -479,10 +479,10 @@ func ErrorHandlingInAPIDemo() {
 	fmt.Println("1. VALIDATION ERROR RESPONSES:")
 	fmt.Println(`
 type ValidationErrorResponse struct {
-    Success bool                   ` + "`json:"success"` + `
-    Message string                 ` + "`json:"message"` + `
-    Code    int                    ` + "`json:"code"` + `
-    Errors  map[string]string      ` + "`json:"errors"` + `
+    Success bool                   ` + "`json:\"success\"`" + `
+    Message string                 ` + "`json:\"message\"`" + `
+    Code    int                    ` + "`json:\"code\"` " + `
+    Errors  map[string]string      ` + "`json:\"errors\"` " + `
 }
 
 // When validation fails, return details:
@@ -518,9 +518,9 @@ func handleCreateWithValidation(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(`
 // Define specific error types
 type APIError struct {
-    Code    int    ` + "`json:"code"` + `
-    Message string ` + "`json:"message"` + `
-    Details string ` + "`json:"details"` + `
+    Code    int    ` + "`json:\"code\"` " + `
+    Message string ` + "`json:\"message\"` " + `
+    Details string ` + "`json:\"details\"` " + `
 }
 
 // Custom error handler
