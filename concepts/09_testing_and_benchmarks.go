@@ -71,12 +71,12 @@ func TestingBasicsDemo() {
 	testWithError := func(t interface{}) {
 		// Test error handling
 		result := 10
-		
+
 		// Check value
 		if result < 0 {
 			// t.Errorf("Got %d, want >= 0", result)
 		}
-		
+
 		// Fatal stops the test immediately
 		if result == -999 {
 			// t.Fatal("Value is invalid - stop testing")
@@ -256,9 +256,9 @@ func ErrorHandlingTestingDemo() {
 	testErrorCases := func() {
 		// Test structure for error cases
 		testCases := []struct {
-			name      string
-			input     string
-			wantErr   bool
+			name        string
+			input       string
+			wantErr     bool
 			errContains string
 		}{
 			{"valid", "hello", false, ""},
@@ -439,7 +439,7 @@ func BenchmarkingDemo() {
 	benchWithSetup := func() {
 		// Setup phase (not timed)
 		data := make([]int, 0, 1000)
-		
+
 		// Simulate reset timer
 		// b.ResetTimer()
 
