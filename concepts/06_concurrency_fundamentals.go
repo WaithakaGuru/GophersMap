@@ -406,7 +406,7 @@ func fanOutFanInDemo() {
 
 	// Collect results (fan-in)
 	fmt.Print("Results: ")
-	for i := 0; i < 5; i++ {
+	for range 5 {
 		fmt.Printf("%d ", <-results)
 	}
 	fmt.Println()

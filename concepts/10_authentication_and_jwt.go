@@ -1,11 +1,13 @@
 package concepts
 
 import (
-	_ "crypto/rand"
-	_ "encoding/base64"
-	_ "encoding/hex"
+    "crypto/rand"
+    "encoding/base64"
+    "encoding/hex"
 	"fmt"
-	_ "time"
+	"time"
+
+    "golang.org/x/crypto/bcrypt"
 )
 
 // ============================================================================
@@ -27,11 +29,9 @@ func PasswordHashingDemo() {
 	fmt.Println("╚════════════════════════════════════════════════════════╝\n")
 
 	fmt.Println("1. BCRYPT FOR PASSWORD HASHING:")
-	fmt.Println(`
+}
 // NEVER store plain text passwords!
 // Use bcrypt for hashing:
-
-import "golang.org/x/crypto/bcrypt"
 
 // Hash a password
 func HashPassword(password string) (string, error) {
@@ -57,21 +57,24 @@ func VerifyPassword(hashedPassword, password string) bool {
 }
 
 // Example usage:
+func exampleBcryptUse () {
 hash, _ := HashPassword("myPassword123")
 // hash = "$2a$10$..." (hashed password)
 
 // Later, verify on login:
-if VerifyPassword(hash, "myPassword123") {
-    // Password matches!
+    if VerifyPassword(hash, "myPassword123") {
+        // Password matches!
+    }
+    fmt.Println(` Properties of bcrypt:`)
+    fmt.Println(`
+- One-way function (cannot unhash)
+- Slow (resistant to brute force)
+- Includes salt (random, prevents rainbow tables)
+- Adaptive (cost can be increased as computers get faster) 
+`)
 }
 
-// Properties of bcrypt:
-// - One-way function (cannot unhash)
-// - Slow (resistant to brute force)
-// - Includes salt (random, prevents rainbow tables)
-// - Adaptive (cost can be increased as computers get faster)
-`)
-
+func PasswordSecurityInfo() {
 	fmt.Println("\n2. PASSWORD SECURITY RULES:")
 	fmt.Println(`
 // ✓ DO:
@@ -89,8 +92,9 @@ if VerifyPassword(hash, "myPassword123") {
 // - Use reversible encryption
 // - Send passwords via email
 // - Log authentication attempts
-// - Create weak password rules
-
+// - Create weak password 
+`)
+}
 // Password requirements example:
 func ValidatePassword(password string) error {
     if len(password) < 12 {

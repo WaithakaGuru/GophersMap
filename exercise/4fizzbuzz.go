@@ -1,8 +1,7 @@
-/*
-	Exercise Four
-
+/*	Exercise Four
 4. Print numbers from 1 to 100. For multiples of 3 print "Fizz", for multiples of 5 print "Buzz", and for both print "FizzBuzz".
 */
+
 package exercise
 
 import "fmt"

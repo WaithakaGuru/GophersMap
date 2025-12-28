@@ -1,8 +1,7 @@
-/*
-	Exercise Twenty seven
-
+/*	Exercise Twenty seven
 27. Implement a simple logger that writes logs to a file with timestamps.
 */
+
 package exercise
 
 import (
@@ -19,6 +18,7 @@ func Logger(txt, filePath string, i io.Writer) error {
 		log.Fatalf("Failed to open file %s", filePath)
 	}
 
+	defer os.Remove(filePath)
 	defer file.Close()
 
 	multW := io.MultiWriter(i, file)
