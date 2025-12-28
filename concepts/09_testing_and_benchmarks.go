@@ -1,3 +1,20 @@
+/*
+TESTING AND BENCHMARKING IN GO - Complete Learning Guide
+============================================================================
+
+Testing is critical for reliable software. Go provides excellent built-in
+testing support with the "testing" package. Benchmarking helps identify
+performance bottlenecks.
+
+TOPICS COVERED:
+- Unit testing fundamentals and conventions
+- Table-driven testing patterns
+- Error and edge case testing
+- Mocking and stub strategies
+- Benchmarking and performance analysis
+- Testing best practices and organization
+*/
+
 package concepts
 
 import (
@@ -5,583 +22,654 @@ import (
 )
 
 // ============================================================================
-// TESTING AND BENCHMARKING IN GO
-// ============================================================================
-// This file covers:
-// - Unit testing fundamentals
-// - Table-driven tests
-// - Testing patterns and best practices
-// - Mocking and stubs
-// - Benchmarking
-// - Test fixtures
+// 1. UNIT TESTING FUNDAMENTALS
 // ============================================================================
 
-// TestingBasicsDemo shows basic testing concepts
+/*
+GO TESTING CONVENTIONS:
+- Test files named *_test.go
+- Test function signature: func Test{FunctionName}(t *testing.T)
+- Run tests: go test, go test -v, go test -run TestName
+- Assertion pattern: if result != expected { t.Errorf(...) }
+
+Testing methods on *testing.T:
+- t.Errorf(format, args...)   : Fail but continue
+- t.Error(args...)            : Fail but continue (no format)
+- t.Fatalf(format, args...)   : Fail and stop
+- t.Fatal(args...)            : Fail and stop
+- t.Log(args...)              : Log message (verbose only)
+- t.Logf(format, args...)     : Log with format
+- t.Skip(args...)             : Skip this test
+- t.Skipf(format, args...)    : Skip with reason
+- t.SkipNow()                 : Skip and stop
+
+Test organization:
+- Arrange: Set up test data
+- Act: Call function being tested
+- Assert: Verify result
+*/
+
 func TestingBasicsDemo() {
-	fmt.Println("\n╔════════════════════════════════════════════════════════╗")
-	fmt.Println("║         TESTING BASICS DEMO                            ║")
-	fmt.Println("╚════════════════════════════════════════════════════════╝\n")
+	fmt.Println("\n========== UNIT TESTING FUNDAMENTALS ==========")
 
-	fmt.Println("1. UNIT TEST STRUCTURE:")
-	fmt.Println(`
-// File: math_test.go (naming convention: _test.go)
-package mypackage
+	// Example test function
+	testAdd := func(t interface{}) {
+		// Arrange
+		a, b := 2, 3
+		expected := 5
 
-import "testing"
+		// Act
+		result := a + b
 
-// Test function signature: func TestFunctionName(t *testing.T)
-func TestAdd(t *testing.T) {
-    // Arrange: Set up test data
-    a := 2
-    b := 3
-    expected := 5
-    
-    // Act: Call function being tested
-    result := Add(a, b)
-    
-    // Assert: Verify result
-    if result != expected {
-        t.Errorf("Add(%d, %d) = %d, want %d", a, b, result, expected)
-    }
+		// Assert
+		if result != expected {
+			// This is how you'd fail a test in a real test file
+			// t.Errorf("Add(%d, %d) = %d, want %d", a, b, result, expected)
+		}
+	}
+
+	testWithError := func(t interface{}) {
+		// Test error handling
+		result := 10
+		
+		// Check value
+		if result < 0 {
+			// t.Errorf("Got %d, want >= 0", result)
+		}
+		
+		// Fatal stops the test immediately
+		if result == -999 {
+			// t.Fatal("Value is invalid - stop testing")
+		}
+	}
+
+	fmt.Println("\n1. TEST FUNCTION SIGNATURE:")
+	fmt.Println("   func Test{FunctionName}(t *testing.T) {")
+	fmt.Println("       // Test code here")
+	fmt.Println("   }")
+
+	fmt.Println("\n2. ASSERTION PATTERN (Arrange-Act-Assert):")
+	fmt.Println("   Arrange: Set up test data and dependencies")
+	fmt.Println("   Act:     Call function being tested")
+	fmt.Println("   Assert:  Verify result matches expected")
+	_ = testAdd
+
+	fmt.Println("\n3. ERROR REPORTING:")
+	fmt.Println("   - t.Errorf(msg)   : Report failure, continue test")
+	fmt.Println("   - t.Fatalf(msg)   : Report failure, stop test")
+	fmt.Println("   - t.Log(msg)       : Log (verbose: go test -v)")
+	_ = testWithError
+
+	fmt.Println("\n4. RUNNING TESTS:")
+	fmt.Println("   go test              : Run all tests")
+	fmt.Println("   go test -v           : Verbose output")
+	fmt.Println("   go test -run TestAdd : Run specific test")
+	fmt.Println("   go test -race        : Detect race conditions")
+
+	fmt.Println("\n✓ Unit testing fundamentals demonstrated")
 }
 
-// Test naming convention:
-// Test{FunctionName}{Scenario}
-func TestAddWithNegativeNumbers(t *testing.T) {
-    result := Add(-2, -3)
-    if result != -5 {
-        t.Errorf("Expected -5, got %d", result)
-    }
-}
+// ============================================================================
+// 2. TABLE-DRIVEN TESTING
+// ============================================================================
 
-// Run tests:
-// go test              (run all tests)
-// go test -v           (verbose - show individual tests)
-// go test -run TestAdd (run specific test)
-// go test -race        (detect race conditions)
-`)
+/*
+TABLE-DRIVEN TESTING:
+- Define test cases as array of structs
+- Each struct contains input and expected output
+- Loop through test cases and run assertions
+- Best practice in Go for testing multiple scenarios
 
-	fmt.Println("\n2. ASSERTION PATTERNS:")
-	fmt.Println(`
-func TestWithErrors(t *testing.T) {
-    value, err := parseInteger("123")
-    
-    // Check for errors
-    if err != nil {
-        t.Errorf("Unexpected error: %v", err)
-    }
-    
-    // Check value
-    if value != 123 {
-        t.Errorf("Got %d, want 123", value)
-    }
-    
-    // Fail test immediately
-    if value < 0 {
-        t.Fatal("Value cannot be negative")  // Stops test
-    }
-    
-    // Log helpful information
-    t.Logf("Test passed with value: %d", value)
-}
-`)
+Benefits:
+- Easy to add test cases (just add rows)
+- Reduces code duplication
+- Clear documentation of behavior
+- Easy to identify failing cases
+- Good for edge cases and boundary conditions
+*/
 
-	fmt.Println("✓ Testing basics demonstrated")
-}
-
-// TableDrivenTestsDemo shows table-driven test pattern
 func TableDrivenTestsDemo() {
-	fmt.Println("\n╔════════════════════════════════════════════════════════╗")
-	fmt.Println("║       TABLE-DRIVEN TESTS DEMO                          ║")
-	fmt.Println("╚════════════════════════════════════════════════════════╝\n")
+	fmt.Println("\n========== TABLE-DRIVEN TESTING ==========")
 
-	fmt.Println("1. TABLE-DRIVEN TEST PATTERN:")
-	fmt.Println(`
-// Define test cases in a table
-func TestMultiplyTableDriven(t *testing.T) {
-    // Test cases: describe what should happen
-    tests := []struct {
-        name     string // Description
-        a, b     int    // Inputs
-        expected int    // Expected output
-    }{
-        {"positive numbers", 2, 3, 6},
-        {"with zero", 5, 0, 0},
-        {"negative numbers", -2, 3, -6},
-        {"large numbers", 1000, 1000, 1000000},
-    }
-    
-    // Run each test case
-    for _, tt := range tests {
-        t.Run(tt.name, func(t *testing.T) {
-            result := Multiply(tt.a, tt.b)
-            if result != tt.expected {
-                t.Errorf("Multiply(%d, %d) = %d, want %d",
-                    tt.a, tt.b, result, tt.expected)
-            }
-        })
-    }
+	// Example table-driven test
+	tableDrivenExample := func() {
+		// Define test cases in a table
+		testCases := []struct {
+			name     string
+			a, b     int
+			expected int
+		}{
+			{"positive numbers", 2, 3, 6},
+			{"with zero", 5, 0, 0},
+			{"negative numbers", -2, 3, -6},
+			{"large numbers", 1000, 1000, 1000000},
+		}
+
+		// Run each test case
+		for _, tc := range testCases {
+			result := tc.a * tc.b
+			if result != tc.expected {
+				fmt.Printf("FAIL: %s - got %d, want %d\n", tc.name, result, tc.expected)
+			}
+		}
+	}
+
+	// Complex table-driven example
+	complexExample := func() {
+		testCases := []struct {
+			name      string
+			input     string
+			expected  string
+			wantErr   bool
+			errSubstr string
+		}{
+			{
+				name:     "valid input",
+				input:    "hello",
+				expected: "HELLO",
+				wantErr:  false,
+			},
+			{
+				name:      "empty input",
+				input:     "",
+				wantErr:   true,
+				errSubstr: "empty",
+			},
+			{
+				name:     "special chars",
+				input:    "hello123",
+				expected: "HELLO123",
+				wantErr:  false,
+			},
+		}
+
+		for _, tc := range testCases {
+			_ = tc // Use test case
+		}
+	}
+
+	fmt.Println("\n1. BASIC TABLE-DRIVEN TEST:")
+	fmt.Println("   tests := []struct{")
+	fmt.Println("       name string")
+	fmt.Println("       input string")
+	fmt.Println("       expected string")
+	fmt.Println("   } {")
+	fmt.Println("       {\"case1\", \"input1\", \"output1\"},")
+	fmt.Println("       {\"case2\", \"input2\", \"output2\"},")
+	fmt.Println("   }")
+	_ = tableDrivenExample
+
+	fmt.Println("\n2. COMPLEX TABLE-DRIVEN TEST:")
+	fmt.Println("   Include:")
+	fmt.Println("   - Test description (name)")
+	fmt.Println("   - Input data")
+	fmt.Println("   - Expected output")
+	fmt.Println("   - Whether error is expected (wantErr)")
+	fmt.Println("   - Error message to check (errSubstr)")
+	_ = complexExample
+
+	fmt.Println("\n3. RUNNING TEST CASES:")
+	fmt.Println("   for _, tc := range testCases {")
+	fmt.Println("       result := functionToTest(tc.input)")
+	fmt.Println("       if result != tc.expected {")
+	fmt.Println("           t.Errorf(\"%s: got %v, want %v\",")
+	fmt.Println("               tc.name, result, tc.expected)")
+	fmt.Println("       }")
+	fmt.Println("   }")
+
+	fmt.Println("\n4. SUB-TESTS FOR ORGANIZATION:")
+	fmt.Println("   for _, tc := range testCases {")
+	fmt.Println("       t.Run(tc.name, func(t *testing.T) {")
+	fmt.Println("           // Test tc here")
+	fmt.Println("       })")
+	fmt.Println("   }")
+	fmt.Println("   Output: TestFunc/case1, TestFunc/case2, etc.")
+
+	fmt.Println("\n✓ Table-driven testing demonstrated")
 }
 
-// Benefits:
-// - Easy to add test cases (just add rows)
-// - Reduces code duplication
-// - Clear expected behavior
-// - Good documentation of edge cases
-`)
+// ============================================================================
+// 3. ERROR AND EDGE CASE TESTING
+// ============================================================================
 
-	fmt.Println("\n2. COMPLEX TABLE-DRIVEN TESTS:")
-	fmt.Println(`
-func TestParseJSONTableDriven(t *testing.T) {
-    tests := []struct {
-        name      string        // Test description
-        input     string        // Input data
-        wantData  interface{}   // Expected parsed data
-        wantErr   bool          // Whether error is expected
-        wantErrMsg string       // Error message substring
-    }{
-        {
-            name:     "valid JSON",
-            input:    ` + "`{\"name\": \"John\"}`" + `,
-            wantData: map[string]string{"name": "John"},
-            wantErr:  false,
-        },
-        {
-            name:       "invalid JSON",
-            input:      ` + "`{invalid}`" + `,
-            wantErr:    true,
-            wantErrMsg: "syntax error",
-        },
-        {
-            name:     "empty input",
-            input:    "",
-            wantErr:  true,
-            wantErrMsg: "empty",
-        },
-    }
-    
-    for _, tt := range tests {
-        t.Run(tt.name, func(t *testing.T) {
-            data, err := ParseJSON(tt.input)
-            
-            if tt.wantErr && err == nil {
-                t.Error("Expected error, got nil")
-            }
-            if !tt.wantErr && err != nil {
-                t.Errorf("Unexpected error: %v", err)
-            }
-            if tt.wantErr && err != nil && !contains(err.Error(), tt.wantErrMsg) {
-                t.Errorf("Error message doesn't contain %q", tt.wantErrMsg)
-            }
-            
-            if !tt.wantErr && data != tt.wantData {
-                t.Errorf("Got %v, want %v", data, tt.wantData)
-            }
-        })
-    }
+/*
+TESTING ERROR CASES:
+- Always test error conditions
+- Check nil errors when success expected
+- Check non-nil errors when failure expected
+- Verify error messages contain expected text
+- Test boundary conditions and edge cases
+
+Edge cases to test:
+- Empty inputs
+- Nil values
+- Large values
+- Negative values
+- Zero values
+- Invalid types/formats
+- Concurrent access (with -race)
+*/
+
+func ErrorHandlingTestingDemo() {
+	fmt.Println("\n========== ERROR AND EDGE CASE TESTING ==========")
+
+	testErrorCases := func() {
+		// Test structure for error cases
+		testCases := []struct {
+			name      string
+			input     string
+			wantErr   bool
+			errContains string
+		}{
+			{"valid", "hello", false, ""},
+			{"empty", "", true, "empty"},
+			{"invalid", "!!!invalid!!!", true, "invalid"},
+		}
+
+		for _, tc := range testCases {
+			if tc.wantErr {
+				// Error expected
+				// err := functionThatErrors(tc.input)
+				// if err == nil {
+				//     t.Error("Expected error, got nil")
+				// }
+			} else {
+				// No error expected
+				// _, err := functionThatMightError(tc.input)
+				// if err != nil {
+				//     t.Errorf("Unexpected error: %v", err)
+				// }
+			}
+		}
+	}
+
+	fmt.Println("\n1. ERROR TESTING PATTERNS:")
+	fmt.Println("   if err != nil { t.Errorf(...) }     : Unexpected error")
+	fmt.Println("   if err == nil { t.Error(...) }      : Expected error")
+	fmt.Println("   if !strings.Contains(...) { ... }   : Check error message")
+
+	fmt.Println("\n2. EDGE CASES TO TEST:")
+	fmt.Println("   - Empty inputs (empty string, empty slice)")
+	fmt.Println("   - Nil values")
+	fmt.Println("   - Boundary values (min, max, zero)")
+	fmt.Println("   - Negative numbers")
+	fmt.Println("   - Very large numbers")
+	fmt.Println("   - Invalid types/formats")
+	_ = testErrorCases
+
+	fmt.Println("\n3. EXAMPLE TABLE:")
+	fmt.Println("   {\"zero\", 0, true, \"cannot divide by zero\"},")
+	fmt.Println("   {\"negative\", -5, false, \"\"},")
+	fmt.Println("   {\"very large\", 999999999, false, \"\"},")
+
+	fmt.Println("\n✓ Error and edge case testing demonstrated")
 }
-`)
 
-	fmt.Println("✓ Table-driven tests demonstrated")
-}
+// ============================================================================
+// 4. MOCKING AND TESTING WITH INTERFACES
+// ============================================================================
 
-// MockingAndStubsDemo shows testing with mocks
+/*
+MOCKING STRATEGY:
+- Use interfaces to decouple dependencies
+- Create mock implementations for testing
+- Avoid testing external services (network, database)
+- Inject dependencies via constructors or fields
+
+Benefits of mocks:
+- Fast tests (no network/database calls)
+- Predictable results
+- Test error conditions easily
+- Test rare conditions (network timeouts)
+- Parallel test execution
+*/
+
 func MockingAndStubsDemo() {
-	fmt.Println("\n╔════════════════════════════════════════════════════════╗")
-	fmt.Println("║       MOCKING AND STUBS DEMO                           ║")
-	fmt.Println("╚════════════════════════════════════════════════════════╝\n")
+	fmt.Println("\n========== MOCKING AND STUBS ==========")
 
-	fmt.Println("1. INTERFACE-BASED TESTING (DEPENDENCY INJECTION):")
-	fmt.Println(`
-// Real implementation uses actual database
-type RealUserRepository struct{}
+	// Example: Interface-based design
+	// type UserRepository interface {
+	//     GetUser(id int) (*User, error)
+	// }
 
-func (r *RealUserRepository) GetUser(id int) (*User, error) {
-    // Actual database call
-    return queryDatabase(id)
+	// Real implementation
+	// type RealUserRepository struct{}
+	// func (r *RealUserRepository) GetUser(id int) (*User, error) {
+	//     // Database call
+	// }
+
+	// Mock for testing
+	// type MockUserRepository struct {
+	//     users map[int]*User
+	// }
+	// func (m *MockUserRepository) GetUser(id int) (*User, error) {
+	//     user, exists := m.users[id]
+	//     if !exists {
+	//         return nil, fmt.Errorf("not found")
+	//     }
+	//     return user, nil
+	// }
+
+	// Service uses interface
+	// type UserService struct {
+	//     repo UserRepository
+	// }
+	// func (s *UserService) GetEmail(id int) (string, error) {
+	//     user, err := s.repo.GetUser(id)
+	//     // ...
+	// }
+
+	// Test with mock
+	// func TestGetEmail(t *testing.T) {
+	//     mock := &MockUserRepository{
+	//         users: map[int]*User{
+	//             1: &User{Email: "test@example.com"},
+	//         },
+	//     }
+	//     service := &UserService{repo: mock}
+	//     email, _ := service.GetEmail(1)
+	//     if email != "test@example.com" {
+	//         t.Errorf("got %s, want test@example.com", email)
+	//     }
+	// }
+
+	fmt.Println("\n1. INTERFACE-BASED TESTING:")
+	fmt.Println("   Define interface for dependency:")
+	fmt.Println("   type Repository interface {")
+	fmt.Println("       Get(id int) (*Data, error)")
+	fmt.Println("   }")
+
+	fmt.Println("\n2. INJECT INTERFACE, NOT CONCRETE TYPE:")
+	fmt.Println("   type Service struct {")
+	fmt.Println("       repo Repository  // Interface!")
+	fmt.Println("   }")
+
+	fmt.Println("\n3. CREATE MOCK IMPLEMENTATION:")
+	fmt.Println("   type MockRepository struct { ... }")
+	fmt.Println("   func (m *MockRepository) Get(...) { ... }")
+
+	fmt.Println("\n4. USE MOCK IN TESTS:")
+	fmt.Println("   mock := &MockRepository{ ... }")
+	fmt.Println("   service := &Service{repo: mock}")
+	fmt.Println("   result := service.someMethod()")
+
+	fmt.Println("\n✓ Mocking and stubs demonstrated")
 }
 
-// Mock implementation for testing
-type MockUserRepository struct {
-    users map[int]*User
-}
+// ============================================================================
+// 5. BENCHMARKING
+// ============================================================================
 
-func (m *MockUserRepository) GetUser(id int) (*User, error) {
-    user, exists := m.users[id]
-    if !exists {
-        return nil, fmt.Errorf("user not found")
-    }
-    return user, nil
-}
+/*
+BENCHMARKING:
+- Measure function performance
+- Benchmark function signature: func Benchmark{Name}(b *testing.B)
+- Run benchmarks: go test -bench=.
+- Go automatically determines iterations (b.N)
 
-// Service uses interface, not concrete type
-type UserService struct {
-    repo UserRepository // Interface, not concrete type
-}
+Benchmark output:
+- BenchmarkName-8    1000000    1234 ns/op   128 B/op    4 allocs/op
+  - Name and cores
+  - Iterations (b.N)
+  - Time per operation (ns/op)
+  - Bytes allocated per op (B/op)
+  - Allocations per op (allocs/op)
 
-func (s *UserService) GetUserEmail(id int) (string, error) {
-    user, err := s.repo.GetUser(id)
-    if err != nil {
-        return "", err
-    }
-    return user.Email, nil
-}
+Best practices:
+- Use b.ResetTimer() after setup
+- Run with -benchmem to see allocations
+- Compare before/after for optimizations
+- Focus on allocation reduction (affects GC)
+*/
 
-// Interface definition
-type UserRepository interface {
-    GetUser(id int) (*User, error)
-}
-
-// Test with mock
-func TestGetUserEmail(t *testing.T) {
-    mock := &MockUserRepository{
-        users: map[int]*User{
-            1: &User{ID: 1, Email: "john@example.com"},
-        },
-    }
-    
-    service := &UserService{repo: mock}
-    email, err := service.GetUserEmail(1)
-    
-    if err != nil {
-        t.Errorf("Unexpected error: %v", err)
-    }
-    if email != "john@example.com" {
-        t.Errorf("Got %s, want john@example.com", email)
-    }
-}
-`)
-
-	fmt.Println("\n2. STUB RESPONSES:")
-	fmt.Println(`
-// Stub HTTP client for testing
-type StubHTTPClient struct {
-    Response *http.Response
-    Error    error
-}
-
-func (s *StubHTTPClient) Do(req *http.Request) (*http.Response, error) {
-    return s.Response, s.Error
-}
-
-// Use stub in tests
-func TestFetchDataWithStub(t *testing.T) {
-    stubResponse := &http.Response{
-        StatusCode: 200,
-        Body:       ioutil.NopCloser(strings.NewReader(` + "`{\"data\": \"test\"}`" + `)),
-    }
-    
-    client := &StubHTTPClient{Response: stubResponse}
-    fetcher := &DataFetcher{client: client}
-    
-    data, err := fetcher.Fetch("http://api.example.com")
-    if err != nil {
-        t.Errorf("Unexpected error: %v", err)
-    }
-    if data != "test" {
-        t.Errorf("Got %s, want test", data)
-    }
-}
-`)
-
-	fmt.Println("✓ Mocking and stubs demonstrated")
-}
-
-// BenchmarkingDemo shows performance testing
 func BenchmarkingDemo() {
-	fmt.Println("\n╔════════════════════════════════════════════════════════╗")
-	fmt.Println("║       BENCHMARKING DEMO                                ║")
-	fmt.Println("╚════════════════════════════════════════════════════════╝\n")
+	fmt.Println("\n========== BENCHMARKING ==========")
 
-	fmt.Println("1. BENCHMARK STRUCTURE:")
-	fmt.Println(`
-// Benchmark function: func Benchmark{FunctionName}(b *testing.B)
-func BenchmarkAdd(b *testing.B) {
-    // Run the function b.N times
-    for i := 0; i < b.N; i++ {
-        Add(2, 3)
-    }
+	// Example benchmark
+	exampleBench := func() {
+		iterations := 1000000
+		operations := 0
+		for i := 0; i < iterations; i++ {
+			// Simulate operation
+			operations++
+		}
+	}
+
+	// Benchmark with setup
+	benchWithSetup := func() {
+		// Setup phase (not timed)
+		data := make([]int, 0, 1000)
+		
+		// Simulate reset timer
+		// b.ResetTimer()
+
+		// Benchmark phase
+		for i := 0; i < 1000; i++ {
+			data = append(data, i)
+		}
+	}
+
+	fmt.Println("\n1. BENCHMARK FUNCTION:")
+	fmt.Println("   func BenchmarkAdd(b *testing.B) {")
+	fmt.Println("       for i := 0; i < b.N; i++ {")
+	fmt.Println("           Add(2, 3)")
+	fmt.Println("       }")
+	fmt.Println("   }")
+
+	fmt.Println("\n2. BENCHMARK COMMANDS:")
+	fmt.Println("   go test -bench=.              : Run all benchmarks")
+	fmt.Println("   go test -bench=BenchmarkAdd   : Run specific")
+	fmt.Println("   go test -bench=. -benchmem    : Show memory")
+	fmt.Println("   go test -bench=. -count=5     : Run 5 times")
+
+	_ = exampleBench
+	_ = benchWithSetup
+
+	fmt.Println("\n3. BENCHMARK OUTPUT INTERPRETATION:")
+	fmt.Println("   BenchmarkAdd-8    1000000000    1.03 ns/op    0 B/op    0 allocs/op")
+	fmt.Println("   - Name and cores (-8 = 8 cores)")
+	fmt.Println("   - Iterations (1 billion times)")
+	fmt.Println("   - Time per operation (1.03 nanoseconds)")
+	fmt.Println("   - Bytes per operation (0)")
+	fmt.Println("   - Allocations per operation (0)")
+
+	fmt.Println("\n4. OPTIMIZATION STRATEGY:")
+	fmt.Println("   - Reduce allocations (allocs/op)")
+	fmt.Println("   - Reduce memory usage (B/op)")
+	fmt.Println("   - Optimize hot paths (high frequency)")
+	fmt.Println("   - Profile with pprof for details")
+
+	fmt.Println("\n✓ Benchmarking demonstrated")
 }
 
-// Go automatically determines b.N for reasonable runtime
-// Run benchmarks:
-// go test -bench=.                (run all benchmarks)
-// go test -bench=BenchmarkAdd    (run specific benchmark)
-// go test -bench=. -benchmem      (show memory allocations)
+// ============================================================================
+// 6. TESTING BEST PRACTICES
+// ============================================================================
 
-// Example output:
-// BenchmarkAdd-8    1000000000   1.03 ns/op
-// (1 billion iterations, 1.03 nanoseconds per operation)
-`)
+/*
+TESTING BEST PRACTICES:
+- Test public API, not private functions
+- Test behavior, not implementation details
+- Use table-driven tests for multiple scenarios
+- Keep tests independent (no shared state)
+- Use mocks for external dependencies
+- Test error paths thoroughly
+- Use clear, descriptive test names
+- Check coverage (aim for 70%+ on critical code)
+- Run tests with -race to detect races
+- Use -timeout to catch hanging tests
+*/
 
-	fmt.Println("\n2. BENCHMARK WITH SETUP/TEARDOWN:")
-	fmt.Println(`
-func BenchmarkComplexOperation(b *testing.B) {
-    // Setup (runs once before benchmark)
-    data := generateLargeDataset()
-    
-    // Reset benchmark timer (exclude setup from timing)
-    b.ResetTimer()
-    
-    // Run b.N times
-    for i := 0; i < b.N; i++ {
-        ProcessData(data)
-    }
-}
-
-// Benchmark with sub-benchmarks
-func BenchmarkStringConcatenation(b *testing.B) {
-    tests := []struct {
-        name string
-        fn   func([]string) string
-    }{
-        {"using +", concatenateWithPlus},
-        {"using fmt.Sprint", concatenateWithSprint},
-        {"using strings.Join", concatenateWithJoin},
-    }
-    
-    strings := generateStrings(100)
-    
-    for _, tt := range tests {
-        b.Run(tt.name, func(b *testing.B) {
-            for i := 0; i < b.N; i++ {
-                tt.fn(strings)
-            }
-        })
-    }
-}
-
-// Benchmarks show which approach is fastest
-`)
-
-	fmt.Println("\n3. BENCHMARK ANALYSIS:")
-	fmt.Println(`
-// Benchmark comparison:
-go test -bench=. -benchmem
-
-// Output shows:
-// - Number of iterations (b.N)
-// - Time per iteration (ns/op, µs/op, ms/op)
-// - Allocations per iteration (allocs/op)
-// - Bytes allocated per iteration (B/op)
-
-// Example:
-// BenchmarkAdd-8               1000000000   1.03 ns/op   0 B/op   0 allocs/op
-// BenchmarkStrConcat-8         10000000    156 ns/op   32 B/op   1 allocs/op
-// BenchmarkJSONMarshal-8        100000   10523 ns/op   512 B/op  12 allocs/op
-
-// Interpretation:
-// - Lower time is better
-// - Fewer allocations is better (less garbage collection)
-// - Less memory allocated is better
-`)
-
-	fmt.Println("✓ Benchmarking demonstrated")
-}
-
-// TestBestPracticesDemo shows testing best practices
 func TestBestPracticesDemo() {
-	fmt.Println("\n╔════════════════════════════════════════════════════════╗")
-	fmt.Println("║       TESTING BEST PRACTICES DEMO                      ║")
-	fmt.Println("╚════════════════════════════════════════════════════════╝\n")
+	fmt.Println("\n========== TESTING BEST PRACTICES ==========")
 
-	fmt.Println("1. TESTING BEST PRACTICES:")
-	fmt.Println(`
-// ✓ DO:
-// - Test public API, not private functions
-// - Test behavior, not implementation
-// - Use table-driven tests for multiple scenarios
-// - Mock external dependencies
-// - Test error cases
-// - Use clear, descriptive test names
-// - Keep tests focused and independent
-// - Run tests with -race flag to detect races
+	fmt.Println("\n1. DO:")
+	fmt.Println("   ✓ Test public functions/methods")
+	fmt.Println("   ✓ Test behavior, not implementation")
+	fmt.Println("   ✓ Use table-driven tests")
+	fmt.Println("   ✓ Keep tests independent")
+	fmt.Println("   ✓ Mock external dependencies")
+	fmt.Println("   ✓ Test error cases")
+	fmt.Println("   ✓ Use descriptive names")
+	fmt.Println("   ✓ Run with -race flag")
 
-// ✗ DON'T:
-// - Test private functions directly
-// - Test implementation details
-// - Create interdependent tests
-// - Test external services (use mocks)
-// - Write huge tests with many assertions
-// - Ignore error cases
-// - Leave hardcoded test data
-`)
+	fmt.Println("\n2. DON'T:")
+	fmt.Println("   ✗ Test private functions")
+	fmt.Println("   ✗ Test implementation details")
+	fmt.Println("   ✗ Create interdependent tests")
+	fmt.Println("   ✗ Call external services")
+	fmt.Println("   ✗ Write massive tests")
+	fmt.Println("   ✗ Skip error cases")
+	fmt.Println("   ✗ Hardcode test data")
 
-	fmt.Println("\n2. TEST FILE ORGANIZATION:")
-	fmt.Println(`
-// Project structure:
-// myapp/
-//   ├── user.go          (implementation)
-//   ├── user_test.go     (tests for user.go)
-//   ├── order.go         (implementation)
-//   ├── order_test.go    (tests for order.go)
-//   └── testdata/        (test fixtures and data files)
-//       ├── valid.json
-//       └── invalid.json
+	fmt.Println("\n3. TEST NAMING CONVENTION:")
+	fmt.Println("   TestFunctionName          : Basic test")
+	fmt.Println("   TestFunctionNameErrorCase : Error handling")
+	fmt.Println("   TestFunctionNameEdgeCase  : Edge cases")
+	fmt.Println("   go test -v shows clear test names")
 
-// Test data organization:
-// testdata/
-//   ├── fixtures/        (test fixtures)
-//   ├── golden/          (expected outputs)
-//   └── seeds/           (seed data)
-`)
+	fmt.Println("\n4. CODE COVERAGE:")
+	fmt.Println("   go test -cover          : Show coverage %")
+	fmt.Println("   go test -coverprofile=coverage.out")
+	fmt.Println("   go tool cover -html=coverage.out")
+	fmt.Println("   Target: 70%+ for important code")
 
-	fmt.Println("\n3. COVERAGE TESTING:")
-	fmt.Println(`
-// Check code coverage:
-go test -cover
+	fmt.Println("\n5. RUNNING TESTS WITH OPTIONS:")
+	fmt.Println("   go test -timeout 10s     : Timeout after 10s")
+	fmt.Println("   go test -parallel 4      : Run 4 tests in parallel")
+	fmt.Println("   go test -failfast        : Stop on first failure")
+	fmt.Println("   go test -count=3         : Run 3 times")
 
-// Example output:
-// ok  	mypackage	0.512s	coverage: 78.5% of statements
-
-// Generate coverage report:
-go test -coverprofile=coverage.out
-go tool cover -html=coverage.out
-
-// Aim for:
-// - Critical code: 90%+ coverage
-// - Normal code: 70%+ coverage
-// - Simple utilities: 50%+ coverage
-
-// Note: 100% coverage doesn't mean bug-free!
-// Focus on testing important behaviors, not just lines.
-`)
-
-	fmt.Println("✓ Testing best practices demonstrated")
+	fmt.Println("\n✓ Testing best practices demonstrated")
 }
 
-// RealWorldTestingExampleDemo shows complete testing example
+// ============================================================================
+// 7. REAL-WORLD TESTING EXAMPLE
+// ============================================================================
+
+/*
+COMPLETE TESTING EXAMPLE:
+- Function to test: Calculator with Add and Divide
+- Test organization: Basic tests + edge cases
+- Table-driven for multiple scenarios
+- Error handling for invalid inputs
+- Benchmarks to measure performance
+*/
+
 func RealWorldTestingExampleDemo() {
-	fmt.Println("\n╔════════════════════════════════════════════════════════╗")
-	fmt.Println("║    REAL WORLD TESTING EXAMPLE DEMO                     ║")
-	fmt.Println("╚════════════════════════════════════════════════════════╝\n")
+	fmt.Println("\n========== REAL-WORLD TESTING EXAMPLE ==========")
 
-	fmt.Println("COMPLETE TESTING EXAMPLE:")
-	fmt.Println(`
-// File: calculator.go
-package calculator
+	// Simple function to test
+	add := func(a, b int) int {
+		return a + b
+	}
 
-type Calculator struct {
-    lastResult float64
+	divide := func(a, b int) (int, error) {
+		if b == 0 {
+			return 0, fmt.Errorf("division by zero")
+		}
+		return a / b, nil
+	}
+
+	// Example test cases structure
+	testCases := []struct {
+		name     string
+		a, b     int
+		expected int
+		wantErr  bool
+	}{
+		{"positive numbers", 2, 3, 5, false},
+		{"zero case", 5, 0, 5, false},
+		{"negative", -2, 3, 1, false},
+		{"large numbers", 1000, 2000, 3000, false},
+	}
+
+	fmt.Println("\n1. FUNCTION UNDER TEST:")
+	fmt.Println("   func Add(a, b int) int {")
+	fmt.Println("       return a + b")
+	fmt.Println("   }")
+	fmt.Println()
+	fmt.Println("   func Divide(a, b int) (int, error) {")
+	fmt.Println("       if b == 0 {")
+	fmt.Println("           return 0, fmt.Errorf(\"division by zero\")")
+	fmt.Println("       }")
+	fmt.Println("       return a / b, nil")
+	fmt.Println("   }")
+
+	fmt.Println("\n2. TABLE-DRIVEN TEST:")
+	fmt.Println("   func TestAdd(t *testing.T) {")
+	fmt.Println("       tests := []struct{ ... }")
+	fmt.Println("       for _, tt := range tests {")
+	fmt.Println("           t.Run(tt.name, func(t *testing.T) { ... })")
+	fmt.Println("       }")
+	fmt.Println("   }")
+
+	fmt.Println("\n3. TEST CASES INCLUDED:")
+	for _, tc := range testCases {
+		result := add(tc.a, tc.b)
+		status := "✓"
+		if result != tc.expected {
+			status = "✗"
+		}
+		fmt.Printf("   %s %s: Add(%d, %d) = %d (expected %d)\n",
+			status, tc.name, tc.a, tc.b, result, tc.expected)
+	}
+
+	fmt.Println("\n4. ERROR HANDLING TEST:")
+	fmt.Println("   func TestDivide(t *testing.T) {")
+	fmt.Println("       result, err := Divide(10, 0)")
+	fmt.Println("       if err == nil {")
+	fmt.Println("           t.Error(\"Expected error, got nil\")")
+	fmt.Println("       }")
+	fmt.Println("   }")
+
+	testDivideResult, testDivideErr := divide(10, 0)
+	_ = testDivideResult
+	if testDivideErr != nil {
+		fmt.Printf("   ✓ Division by zero correctly returns error: %v\n", testDivideErr)
+	}
+
+	fmt.Println("\n5. BENCHMARK EXAMPLE:")
+	fmt.Println("   func BenchmarkAdd(b *testing.B) {")
+	fmt.Println("       for i := 0; i < b.N; i++ {")
+	fmt.Println("           Add(123, 456)")
+	fmt.Println("       }")
+	fmt.Println("   }")
+
+	fmt.Println("\n✓ Real-world testing example demonstrated")
 }
 
-func (c *Calculator) Add(a, b float64) float64 {
-    c.lastResult = a + b
-    return c.lastResult
-}
+// ============================================================================
+// MAIN EXECUTION
+// ============================================================================
 
-func (c *Calculator) Divide(a, b float64) (float64, error) {
-    if b == 0 {
-        return 0, fmt.Errorf("division by zero")
-    }
-    c.lastResult = a / b
-    return c.lastResult, nil
-}
-
-// File: calculator_test.go
-package calculator
-
-import "testing"
-
-func TestCalculatorAdd(t *testing.T) {
-    tests := []struct {
-        name     string
-        a, b     float64
-        expected float64
-    }{
-        {"positive", 2, 3, 5},
-        {"with zero", 5, 0, 5},
-        {"negative", -2, 3, 1},
-        {"decimals", 1.5, 2.5, 4.0},
-    }
-    
-    for _, tt := range tests {
-        t.Run(tt.name, func(t *testing.T) {
-            calc := &Calculator{}
-            result := calc.Add(tt.a, tt.b)
-            
-            if result != tt.expected {
-                t.Errorf("Add(%f, %f) = %f, want %f",
-                    tt.a, tt.b, result, tt.expected)
-            }
-        })
-    }
-}
-
-func TestCalculatorDivide(t *testing.T) {
-    tests := []struct {
-        name      string
-        a, b      float64
-        expected  float64
-        wantErr   bool
-    }{
-        {"normal", 10, 2, 5, false},
-        {"by zero", 10, 0, 0, true},
-        {"decimals", 7.5, 2.5, 3, false},
-    }
-    
-    for _, tt := range tests {
-        t.Run(tt.name, func(t *testing.T) {
-            calc := &Calculator{}
-            result, err := calc.Divide(tt.a, tt.b)
-            
-            if tt.wantErr && err == nil {
-                t.Error("Expected error, got nil")
-            }
-            if !tt.wantErr && err != nil {
-                t.Errorf("Unexpected error: %v", err)
-            }
-            if !tt.wantErr && result != tt.expected {
-                t.Errorf("Got %f, want %f", result, tt.expected)
-            }
-        })
-    }
-}
-
-func BenchmarkAdd(b *testing.B) {
-    calc := &Calculator{}
-    for i := 0; i < b.N; i++ {
-        calc.Add(123.45, 678.90)
-    }
-}
-
-func BenchmarkDivide(b *testing.B) {
-    calc := &Calculator{}
-    for i := 0; i < b.N; i++ {
-        calc.Divide(1000, 3)
-    }
-}
-`)
-
-	fmt.Println("✓ Real world testing example demonstrated")
-}
-
-// RunTestingAndBenchmarkExamples executes all testing demos
+// RunTestingAndBenchmarkExamples executes all testing demonstrations
 func RunTestingAndBenchmarkExamples() {
-	fmt.Println("╔════════════════════════════════════════════════════════╗")
-	fmt.Println("║    TESTING AND BENCHMARKING - COMPREHENSIVE GUIDE       ║")
+	fmt.Println("\n╔════════════════════════════════════════════════════════╗")
+	fmt.Println("║    TESTING AND BENCHMARKING - COMPREHENSIVE GUIDE      ║")
 	fmt.Println("╚════════════════════════════════════════════════════════╝")
 
 	TestingBasicsDemo()
 	TableDrivenTestsDemo()
+	ErrorHandlingTestingDemo()
 	MockingAndStubsDemo()
 	BenchmarkingDemo()
 	TestBestPracticesDemo()
 	RealWorldTestingExampleDemo()
 
 	fmt.Println("\n╔════════════════════════════════════════════════════════╗")
-	fmt.Println("║    ALL TESTING AND BENCHMARKING EXAMPLES COMPLETE       ║")
-	fmt.Println("╚════════════════════════════════════════════════════════╝\n")
+	fmt.Println("║    ALL TESTING AND BENCHMARKING EXAMPLES COMPLETE      ║")
+	fmt.Println("╚════════════════════════════════════════════════════════╝")
 
-	fmt.Println("KEY TAKEAWAYS:")
-	fmt.Println("✓ Test functions must be in *_test.go files")
+	fmt.Println("\nKEY TAKEAWAYS:")
+	fmt.Println("✓ Test files named *_test.go with func Test{Name}(t *testing.T)")
 	fmt.Println("✓ Use table-driven tests for multiple scenarios")
-	fmt.Println("✓ Test error cases and edge cases")
+	fmt.Println("✓ Always test error cases and edge cases")
 	fmt.Println("✓ Mock external dependencies using interfaces")
-	fmt.Println("✓ Benchmarks measure performance")
-	fmt.Println("✓ Use -race flag to detect race conditions")
-	fmt.Println("✓ Aim for meaningful coverage, not 100%")
 	fmt.Println("✓ Keep tests independent and focused")
-	fmt.Println("✓ Use subtests for organization")
-	fmt.Println("✓ Benchmarks help find performance bottlenecks\n")
+	fmt.Println("✓ Use benchmarks to measure performance")
+	fmt.Println("✓ Focus on allocation reduction in benchmarks")
+	fmt.Println("✓ Run tests with -race to detect race conditions")
+	fmt.Println("✓ Aim for 70%+ code coverage on critical paths")
+	fmt.Println("✓ Test behavior, not implementation details\n")
 }
