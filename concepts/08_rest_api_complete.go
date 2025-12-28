@@ -25,20 +25,19 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-	"strings"
 	"sync"
 	"time"
 )
 
 // Resource represents a blog post or article
 type Resource struct {
-	ID        int       `json:"id"`
-	Title     string    `json:"title"`
-	Content   string    `json:"content"`
-	Author    string    `json:"author"`
-	Tags      []string  `json:"tags"`
-	CreatedAt string    `json:"created_at"`
-	UpdatedAt string    `json:"updated_at"`
+	ID        int      `json:"id"`
+	Title     string   `json:"title"`
+	Content   string   `json:"content"`
+	Author    string   `json:"author"`
+	Tags      []string `json:"tags"`
+	CreatedAt string   `json:"created_at"`
+	UpdatedAt string   `json:"updated_at"`
 }
 
 // APIResponse wraps all API responses with consistent format
@@ -71,7 +70,6 @@ type ResourceStore struct {
 	resources map[int]Resource
 	nextID    int
 }
-
 
 // ============================================================================
 // 1. COMPLETE REST API STRUCTURE
@@ -659,8 +657,6 @@ func RealWorldAPIExampleDemo() {
 
 	fmt.Println("\n✓ Real-world API example demonstrated")
 }
-
-
 
 // ============================================================================
 // MAIN EXECUTION
