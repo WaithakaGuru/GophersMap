@@ -1,636 +1,431 @@
+/*
+AUTHENTICATION AND JWT (JSON WEB TOKENS) IN GO
+============================================================================
+
+Authentication is crucial for secure applications. This file covers:
+- Password hashing with bcrypt (never store plain text!)
+- JWT tokens for stateless authentication
+- Token claims and expiration
+- Refresh tokens for better security
+- Integration with HTTP handlers
+- Security best practices
+
+Key principles:
+- Never store plain text passwords
+- Always hash passwords on server side
+- Use HTTPS for all authentication
+- Keep tokens short-lived
+- Implement rate limiting for login attempts
+*/
+
 package concepts
 
 import (
-    "crypto/rand"
-    "encoding/base64"
-    "encoding/hex"
 	"fmt"
-	"time"
 
-    "golang.org/x/crypto/bcrypt"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // ============================================================================
-// AUTHENTICATION AND JWT (JSON WEB TOKENS)
-// ============================================================================
-// This file covers:
-// - Password hashing (bcrypt)
-// - JWT creation and validation
-// - Token claims
-// - Refresh tokens
-// - Integration with REST APIs
-// - Security best practices
+// 1. PASSWORD HASHING WITH BCRYPT
 // ============================================================================
 
-// PasswordHashingDemo demonstrates secure password handling
-func PasswordHashingDemo() {
-	fmt.Println("\n╔════════════════════════════════════════════════════════╗")
-	fmt.Println("║       PASSWORD HASHING DEMO                            ║")
-	fmt.Println("╚════════════════════════════════════════════════════════╝\n")
+/*
+BCRYPT:
+- One-way hashing algorithm (cannot be reversed)
+- Automatically includes salt (random, prevents rainbow tables)
+- Slow by design (resistant to brute force attacks)
+- Adaptive cost (can increase as computers get faster)
+- Industry standard for password storage
 
-	fmt.Println("1. BCRYPT FOR PASSWORD HASHING:")
-}
-// NEVER store plain text passwords!
-// Use bcrypt for hashing:
+Never store plain text passwords!
+*/
 
-// Hash a password
+// HashPassword creates a bcrypt hash of a password
 func HashPassword(password string) (string, error) {
-    // bcrypt.DefaultCost = 10 (good balance)
-    // Higher cost = slower (better security but slower)
-    hashedPassword, err := bcrypt.GenerateFromPassword(
-        []byte(password),
-        bcrypt.DefaultCost,
-    )
-    if err != nil {
-        return "", err
-    }
-    return string(hashedPassword), nil
+	// bcrypt.DefaultCost = 10 (good balance of speed/security)
+	// Higher cost = slower but more secure
+	hashedPassword, err := bcrypt.GenerateFromPassword(
+		[]byte(password),
+		bcrypt.DefaultCost,
+	)
+	if err != nil {
+		return "", err
+	}
+	return string(hashedPassword), nil
 }
 
-// Verify password
+// VerifyPassword checks if password matches the hash
 func VerifyPassword(hashedPassword, password string) bool {
-    err := bcrypt.CompareHashAndPassword(
-        []byte(hashedPassword),
-        []byte(password),
-    )
-    return err == nil
+	err := bcrypt.CompareHashAndPassword(
+		[]byte(hashedPassword),
+		[]byte(password),
+	)
+	return err == nil
 }
 
-// Example usage:
-func exampleBcryptUse () {
-hash, _ := HashPassword("myPassword123")
-// hash = "$2a$10$..." (hashed password)
-
-// Later, verify on login:
-    if VerifyPassword(hash, "myPassword123") {
-        // Password matches!
-    }
-    fmt.Println(` Properties of bcrypt:`)
-    fmt.Println(`
-- One-way function (cannot unhash)
-- Slow (resistant to brute force)
-- Includes salt (random, prevents rainbow tables)
-- Adaptive (cost can be increased as computers get faster) 
-`)
-}
-
-func PasswordSecurityInfo() {
-	fmt.Println("\n2. PASSWORD SECURITY RULES:")
-	fmt.Println(`
-// ✓ DO:
-// - Use bcrypt/scrypt/argon2 for hashing
-// - Never log passwords
-// - Use HTTPS only (no HTTP)
-// - Implement rate limiting for login attempts
-// - Force password reset on breach
-// - Use strong password requirements
-// - Hash on server, never client-side only
-
-// ✗ DON'T:
-// - Store plain text passwords
-// - Use simple hash (MD5, SHA1)
-// - Use reversible encryption
-// - Send passwords via email
-// - Log authentication attempts
-// - Create weak password 
-`)
-}
-// Password requirements example:
+// ValidatePassword checks password strength requirements
 func ValidatePassword(password string) error {
-    if len(password) < 12 {
-        return fmt.Errorf("password too short (min 12 chars)")
-    }
-    hasUpper := false
-    hasLower := false
-    hasDigit := false
-    hasSpecial := false
-    
-    for _, r := range password {
-        switch {
-        case r >= 'A' && r <= 'Z':
-            hasUpper = true
-        case r >= 'a' && r <= 'z':
-            hasLower = true
-        case r >= '0' && r <= '9':
-            hasDigit = true
-        case r >= '!' && r <= '~':
-            hasSpecial = true
-        }
-    }
-    
-    if !hasUpper || !hasLower || !hasDigit || !hasSpecial {
-        return fmt.Errorf("password must contain uppercase, lowercase, digit, special char")
-    }
-    return nil
-}
-`)
+	if len(password) < 12 {
+		return fmt.Errorf("password too short (min 12 chars)")
+	}
+	hasUpper := false
+	hasLower := false
+	hasDigit := false
+	hasSpecial := false
 
-	fmt.Println("✓ Password hashing demonstrated")
+	for _, r := range password {
+		switch {
+		case r >= 'A' && r <= 'Z':
+			hasUpper = true
+		case r >= 'a' && r <= 'z':
+			hasLower = true
+		case r >= '0' && r <= '9':
+			hasDigit = true
+		case r >= '!' && r <= '~':
+			hasSpecial = true
+		}
+	}
+
+	if !hasUpper || !hasLower || !hasDigit || !hasSpecial {
+		return fmt.Errorf("password must contain uppercase, lowercase, digit, special char")
+	}
+	return nil
 }
 
-// JWTBasicsDemo demonstrates JWT concepts
-func JWTBasicsDemo() {
-	fmt.Println("\n╔════════════════════════════════════════════════════════╗")
-	fmt.Println("║         JWT BASICS DEMO                                ║")
-	fmt.Println("╚════════════════════════════════════════════════════════╝\n")
+// PasswordHashingDemo demonstrates bcrypt usage
+func PasswordHashingDemo() {
+	fmt.Println("\n========== PASSWORD HASHING WITH BCRYPT ==========")
 
-	fmt.Println("1. WHAT IS JWT:")
-	fmt.Println(`
-// JWT = JSON Web Token
-// Format: header.payload.signature
+	fmt.Println("\n1. HASHING A PASSWORD:")
+	// Example of hashing a password
+	password := "MySecurePassword123!"
+	hash, err := HashPassword(password)
+	if err != nil {
+		fmt.Printf("Error hashing: %v\n", err)
+		return
+	}
+	fmt.Printf("Original password: %s\n", password)
+	fmt.Printf("Hashed (bcrypt):   %s\n", hash)
 
-// Structure:
+	fmt.Println("\n2. VERIFYING PASSWORD:")
+	// Verify correct password
+	isValid := VerifyPassword(hash, "MySecurePassword123!")
+	fmt.Printf("Password matches: %v\n", isValid)
+
+	// Verify wrong password
+	isValid = VerifyPassword(hash, "WrongPassword")
+	fmt.Printf("Wrong password matches: %v\n", isValid)
+
+	fmt.Println("\n3. PASSWORD VALIDATION:")
+	// Test password strength
+	err = ValidatePassword("weak")
+	fmt.Printf("Weak password check: %v\n", err)
+
+	err = ValidatePassword("StrongPass123!")
+	fmt.Printf("Strong password check: %v\n", err)
+
+	fmt.Println("\n4. BCRYPT PROPERTIES:")
+	fmt.Println("   - One-way function (cannot unhash)")
+	fmt.Println("   - Includes random salt (prevents rainbow tables)")
+	fmt.Println("   - Adaptive cost (increases with hardware)")
+	fmt.Println("   - Slow by design (resists brute force)")
+
+	fmt.Println("\n✓ Password hashing demonstrated")
+}
+
+// ============================================================================
+// 2. JWT (JSON WEB TOKEN) CONCEPTS
+// ============================================================================
+
+/*
+JWT STRUCTURE:
+- Consists of three parts: header.payload.signature
+- All parts are Base64 encoded
+
+Header:
 {
-  "alg": "HS256",    // Algorithm (header)
-  "typ": "JWT"
+  "alg": "HS256",    // Signing algorithm
+  "typ": "JWT"       // Token type
 }
-.
+
+Payload (Claims):
 {
-  "sub": "user123",           // Subject (payload)
-  "name": "John Doe",
-  "email": "john@example.com",
-  "iat": 1516239022,          // Issued at
-  "exp": 1516242622           // Expiration
+  "sub": "user123",           // Subject (user ID)
+  "name": "John Doe",         // Custom claim
+  "iat": 1516239022,          // Issued at (Unix timestamp)
+  "exp": 1516242622           // Expiration (Unix timestamp)
 }
-.
+
+Signature:
 HMACSHA256(base64(header).base64(payload), secret)
 
-// Example JWT:
-// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
-// eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.
-// SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
-`)
+Benefits:
+- Stateless (no server-side session storage)
+- Self-contained (claims are in token)
+- Scalable (works with microservices)
+- Mobile-friendly (can be sent in headers or URLs)
+- Cross-domain/CORS compatible
+*/
+
+// JWTClaims represents standard JWT claims
+type JWTClaims struct {
+	Subject   string // "sub" - User identifier
+	IssuedAt  int64  // "iat" - When token was created
+	ExpiresAt int64  // "exp" - When token expires
+	NotBefore int64  // "nbf" - Before this time, invalid
+	Issuer    string // "iss" - Who created the token
+	Audience  string // "aud" - Who token is for
+
+	// Custom claims
+	Username string
+	Email    string
+	Role     string
+}
+
+// JWTBasicsDemo explains JWT concepts
+func JWTBasicsDemo() {
+	fmt.Println("\n========== JWT (JSON WEB TOKEN) BASICS ==========")
+
+	fmt.Println("\n1. JWT STRUCTURE:")
+	fmt.Println("   Format: header.payload.signature")
+	fmt.Println("   Example:")
+	fmt.Println("   eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.")
+	fmt.Println("   eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.")
+	fmt.Println("   SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c")
 
 	fmt.Println("\n2. JWT CLAIMS:")
-	fmt.Println(`
-type Claims struct {
-    // Standard claims
-    Subject   string ` + "`json:\"sub\"`" + `  // User ID
-    IssuedAt  int64  ` + "`json:\"iat\"`" + `  // When token was created
-    ExpiresAt int64  ` + "`json:\"exp\"`" + `  // When token expires
-    NotBefore int64  ` + "`json:\"nbf\"`" + `  // Before this time, invalid
-    Issuer    string ` + "`json:\"iss\"`" + `  // Who created token
-    Audience  string ` + "`json:\"aud\"`" + `  // Who token is for
-    ID        string ` + "`json:\"jti\"`" + `  // Unique token ID
-    
-    // Custom claims
-    Username  string ` + "`json:\"username\"`" + `
-    Email     string ` + "`json:\"email\"`" + `
-    Role      string ` + "`json:\"role\"`" + `
+	fmt.Println("   - sub:  Subject (user ID)")
+	fmt.Println("   - iat:  Issued at (Unix timestamp)")
+	fmt.Println("   - exp:  Expiration (Unix timestamp)")
+	fmt.Println("   - nbf:  Not before (Unix timestamp)")
+	fmt.Println("   - iss:  Issuer (who created token)")
+	fmt.Println("   - aud:  Audience (who token is for)")
+	fmt.Println("   - Custom claims: username, email, role, etc.")
+
+	fmt.Println("\n3. JWT WORKFLOW:")
+	fmt.Println("   1. User logs in with credentials")
+	fmt.Println("   2. Server creates JWT token")
+	fmt.Println("   3. Client stores token (cookie, localStorage, etc.)")
+	fmt.Println("   4. Client sends token in Authorization header")
+	fmt.Println("   5. Server verifies token signature and expiration")
+	fmt.Println("   6. If valid, process request; if expired, reject")
+
+	fmt.Println("\n4. ADVANTAGES:")
+	fmt.Println("   ✓ Stateless (no session storage needed)")
+	fmt.Println("   ✓ Scalable (works with multiple servers)")
+	fmt.Println("   ✓ Self-contained (claims in token)")
+	fmt.Println("   ✓ Mobile-friendly")
+	fmt.Println("   ✓ Cross-domain/CORS compatible")
+
+	fmt.Println("\n5. DISADVANTAGES:")
+	fmt.Println("   ✗ Cannot be revoked until expiration")
+	fmt.Println("   ✗ If compromised, attacker has access until expiration")
+	fmt.Println("   ✗ Larger than session cookies")
+	fmt.Println("   ✗ Cannot store sensitive data (only encoded)")
+	fmt.Println("   ✗ Key rotation is complex")
+
+	fmt.Println("\n✓ JWT basics demonstrated")
 }
 
-// Standard claim times are Unix timestamps
-claims := Claims{
-    Subject:   "user123",
-    Username:  "john",
-    Email:     "john@example.com",
-    Role:      "admin",
-    IssuedAt:  time.Now().Unix(),
-    ExpiresAt: time.Now().Add(24 * time.Hour).Unix(),
-}
-`)
+// ============================================================================
+// 3. TOKEN PATTERNS
+// ============================================================================
 
-	fmt.Println("\n3. JWT ADVANTAGES AND DISADVANTAGES:")
-	fmt.Println(`
-// Advantages:
-// ✓ Stateless (no server-side session storage)
-// ✓ Scalable (works great with microservices)
-// ✓ Mobile-friendly (can send in headers or URLs)
-// ✓ Self-contained (claims are in token)
-// ✓ Cross-domain/CORS (works with any domain)
-// ✓ Can be encrypted (JWE)
+/*
+ACCESS TOKEN vs REFRESH TOKEN:
 
-// Disadvantages:
-// ✗ Token cannot be revoked until expiration
-// ✗ If compromised, attacker has access until expiration
-// ✗ Larger than session cookies
-// ✗ Cannot store sensitive data (it's encoded, not encrypted)
-// ✗ Key rotation is complex
-`)
+Access Token:
+- Short-lived (15 minutes)
+- Used for API requests
+- Has restricted permissions
+- If compromised, limited damage
 
-	fmt.Println("✓ JWT basics demonstrated")
-}
+Refresh Token:
+- Long-lived (7 days)
+- Used only to get new access token
+- Stored securely (HTTP-only cookie)
+- Can be revoked
 
-// JWTImplementationDemo shows JWT usage patterns
-func JWTImplementationDemo() {
-	fmt.Println("\n╔════════════════════════════════════════════════════════╗")
-	fmt.Println("║         JWT IMPLEMENTATION DEMO                        ║")
-	fmt.Println("╚════════════════════════════════════════════════════════╝\n")
+Flow:
+1. User logs in → Get access token + refresh token
+2. Use access token for API calls
+3. When access token expires → Use refresh token to get new one
+4. If refresh token expired → User must login again
+*/
 
-	fmt.Println("1. CREATE JWT TOKEN:")
-	fmt.Println(`
-import "github.com/golang-jwt/jwt/v4"
-
-// Create token
-func CreateToken(userID string, username string) (string, error) {
-    claims := jwt.MapClaims{
-        "sub": userID,
-        "username": username,
-        "email": username + "@example.com",
-        "role": "user",
-        "iat": time.Now().Unix(),
-        "exp": time.Now().Add(24 * time.Hour).Unix(),
-    }
-    
-    token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-    
-    // Sign with secret key
-    secretKey := "your-secret-key-keep-it-safe"
-    tokenString, err := token.SignedString([]byte(secretKey))
-    if err != nil {
-        return "", err
-    }
-    
-    return tokenString, nil
-}
-`)
-
-	fmt.Println("\n2. VERIFY JWT TOKEN:")
-	fmt.Println(`
-func VerifyToken(tokenString string) (*jwt.Claims, error) {
-    secretKey := "your-secret-key-keep-it-safe"
-    
-    claims := &jwt.StandardClaims{}
-    token, err := jwt.ParseWithClaims(
-        tokenString,
-        claims,
-        func(token *jwt.Token) (interface{}, error) {
-            // Verify signing method
-            if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-                return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
-            }
-            return []byte(secretKey), nil
-        },
-    )
-    
-    if err != nil {
-        return nil, fmt.Errorf("token parsing failed: %v", err)
-    }
-    
-    if !token.Valid {
-        return nil, fmt.Errorf("token is not valid")
-    }
-    
-    return claims, nil
-}
-`)
-
-	fmt.Println("\n3. USE IN HTTP MIDDLEWARE:")
-	fmt.Println(`
-func AuthMiddleware(secretKey string) func(http.Handler) http.Handler {
-    return func(next http.Handler) http.Handler {
-        return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-            // Get token from Authorization header
-            authHeader := r.Header.Get("Authorization")
-            if authHeader == "" {
-                http.Error(w, "Missing authorization header", http.StatusUnauthorized)
-                return
-            }
-            
-            // Expected format: "Bearer token123..."
-            parts := strings.Split(authHeader, " ")
-            if len(parts) != 2 || parts[0] != "Bearer" {
-                http.Error(w, "Invalid authorization header", http.StatusUnauthorized)
-                return
-            }
-            
-            tokenString := parts[1]
-            
-            // Verify token
-            claims, err := VerifyToken(tokenString)
-            if err != nil {
-                http.Error(w, fmt.Sprintf("Invalid token: %v", err), http.StatusUnauthorized)
-                return
-            }
-            
-            // Check expiration
-            if claims.ExpiresAt < time.Now().Unix() {
-                http.Error(w, "Token expired", http.StatusUnauthorized)
-                return
-            }
-            
-            // Store claims in request context
-            ctx := context.WithValue(r.Context(), "claims", claims)
-            next.ServeHTTP(w, r.WithContext(ctx))
-        })
-    }
+// TokenPair represents access and refresh tokens
+type TokenPair struct {
+	AccessToken  string
+	RefreshToken string
+	ExpiresIn    int64 // seconds
 }
 
-// Usage in handler:
-func ProtectedHandler(w http.ResponseWriter, r *http.Request) {
-    claims := r.Context().Value("claims").(*jwt.StandardClaims)
-    fmt.Fprintf(w, "Hello %s", claims.Subject)
-}
-`)
-
-	fmt.Println("✓ JWT implementation demonstrated")
-}
-
-// RefreshTokensDemo shows token refresh pattern
+// RefreshTokensDemo explains token refresh pattern
 func RefreshTokensDemo() {
-	fmt.Println("\n╔════════════════════════════════════════════════════════╗")
-	fmt.Println("║      REFRESH TOKENS DEMO                               ║")
-	fmt.Println("╚════════════════════════════════════════════════════════╝\n")
+	fmt.Println("\n========== REFRESH TOKEN PATTERN ==========")
 
-	fmt.Println("1. REFRESH TOKEN PATTERN:")
-	fmt.Println(`
-    // Problem: Access tokens should be short-lived (security)
-    // But constantly asking user to login is annoying (UX)
-    // Solution: Refresh tokens!
+	fmt.Println("\n1. WHY REFRESH TOKENS?")
+	fmt.Println("   - Security: Access tokens should be short-lived")
+	fmt.Println("   - UX: Don't want users to login constantly")
+	fmt.Println("   - Balance between security and convenience")
 
-    // Token types:
-    // - Access Token: Short-lived (15 min), for API requests
-    // - Refresh Token: Long-lived (7 days), for getting new access token
+	fmt.Println("\n2. TOKEN TYPES AND LIFETIMES:")
+	fmt.Println("   Access Token:  15 minutes")
+	fmt.Println("   Refresh Token: 7 days")
+	fmt.Println("   API Key:       Never expires (use carefully)")
 
-    type TokenPair struct {
-        AccessToken  string  ` + "`json:\"access_token\"`" + ` 
-        RefreshToken string ` + "`json:\"refresh_token\"`" + `
-        ExpiresIn    int64  ` + "`json:\"expires_in\"`" + `
-        ff int ` + "`json:\"jgjg\"`" + `
-    }
+	fmt.Println("\n3. LOGIN FLOW:")
+	fmt.Println("   1. User sends username + password to /login")
+	fmt.Println("   2. Server verifies credentials")
+	fmt.Println("   3. Server creates access token (15 min expiry)")
+	fmt.Println("   4. Server creates refresh token (7 day expiry)")
+	fmt.Println("   5. Client stores both tokens")
+
+	fmt.Println("\n4. ACCESSING API:")
+	fmt.Println("   1. Client sends API request with access token in header")
+	fmt.Println("   2. Server verifies token is valid and not expired")
+	fmt.Println("   3. If valid: process request")
+	fmt.Println("   4. If expired: return 401 Unauthorized")
+
+	fmt.Println("\n5. TOKEN REFRESH:")
+	fmt.Println("   1. Client detects access token expired (401)")
+	fmt.Println("   2. Client sends refresh token to /refresh endpoint")
+	fmt.Println("   3. Server verifies refresh token")
+	fmt.Println("   4. Server creates new access token")
+	fmt.Println("   5. Client retries original request with new token")
+
+	fmt.Println("\n6. SECURE STORAGE:")
+	fmt.Println("   Access Token:")
+	fmt.Println("   - Can be in: localStorage (XSS vulnerable)")
+	fmt.Println("   - Or in: memory (lost on refresh)")
+	fmt.Println("")
+	fmt.Println("   Refresh Token:")
+	fmt.Println("   - MUST be in: HTTP-only cookie (XSS protected)")
+	fmt.Println("   - MUST have: Secure flag (HTTPS only)")
+	fmt.Println("   - MUST have: SameSite flag (CSRF protected)")
+
+	fmt.Println("\n✓ Refresh token pattern demonstrated")
 }
 
-func CreateTokenPair(userID string) (*TokenPair, error) {
-    // Create short-lived access token (15 minutes)
-    accessToken, err := CreateToken(userID, "access", 15*time.Minute)
-    if err != nil {
-        return nil, err
-    }
-    
-    // Create long-lived refresh token (7 days)
-    refreshToken, err := CreateToken(userID, "refresh", 7*24*time.Hour)
-    if err != nil {
-        return nil, err
-    }
-    
-    return &TokenPair{
-        AccessToken:  accessToken,
-        RefreshToken: refreshToken,
-        ExpiresIn:    15 * 60, // 15 minutes in seconds
-    }, nil
-}
+// ============================================================================
+// 4. SECURITY BEST PRACTICES
+// ============================================================================
 
-// Login endpoint returns both tokens:
-func LoginHandler(w http.ResponseWriter, r *http.Request) {
-    // Verify credentials
-    userID := "user123"
-    
-    tokens, _ := CreateTokenPair(userID)
-    
-    w.Header().Set("Content-Type", "application/json")
-    json.NewEncoder(w).Encode(tokens)
-}
-`)
+/*
+AUTHENTICATION SECURITY PRINCIPLES:
 
-	fmt.Println("\n2. REFRESH TOKEN ENDPOINT:")
-	fmt.Println(`
-// Client sends refresh token to get new access token
-func RefreshTokenHandler(w http.ResponseWriter, r *http.Request) {
-    var req struct {
-        RefreshToken string ` + "`json:\"refresh_token\"`" + `
-    }
-    json.NewDecoder(r.Body).Decode(&req)
-    
-    // Verify refresh token
-    claims, err := VerifyToken(req.RefreshToken)
-    if err != nil {
-        http.Error(w, "Invalid refresh token", http.StatusUnauthorized)
-        return
-    }
-    
-    // Check token type
-    if tokenType, ok := claims["type"].(string); !ok || tokenType != "refresh" {
-        http.Error(w, "Not a refresh token", http.StatusUnauthorized)
-        return
-    }
-    
-    // Create new access token
-    userID := claims["sub"].(string)
-    newAccessToken, _ := CreateToken(userID, "access", 15*time.Minute)
-    
-    response := map[string]string{
-        "access_token": newAccessToken,
-        "token_type":   "Bearer",
-    }
-    
-    w.Header().Set("Content-Type", "application/json")
-    json.NewEncoder(w).Encode(response)
-}
+1. NEVER store plain text passwords - use bcrypt
+2. ALWAYS use HTTPS (encrypt in transit)
+3. Use short-lived access tokens (15-60 minutes)
+4. Use HTTP-only cookies for sensitive tokens
+5. Implement rate limiting on login endpoints
+6. Log security events
+7. Use strong password requirements
+8. Implement account lockout after failed attempts
+9. Force password reset on breach
+10. Use multi-factor authentication (MFA)
 
-// Refresh token should be stored securely on client:
-// - HTTP-only cookie (best, protected from XSS)
-// - Local storage (vulnerable to XSS, but simpler)
-// - Memory (lost on page refresh)
-`)
+Common Attacks:
 
-	fmt.Println("✓ Refresh tokens demonstrated")
-}
+XSS (Cross-Site Scripting):
+- Attack: Inject malicious script into web page
+- Victim: User's browser executes attacker's script
+- Steals: Tokens from localStorage
+- Defense: Use HTTP-only cookies, sanitize input, CSP headers
 
-// SecurityBestPracticesDemo shows security patterns
+CSRF (Cross-Site Request Forgery):
+- Attack: Make user perform unwanted action
+- Method: User logs into Bank.com, then visits Evil.com
+- Evil.com makes request to Bank.com in user's browser
+- Defense: Use SameSite cookies, CSRF tokens, verify origin
+
+Token Hijacking:
+- Attack: Steal token from network or storage
+- Defense: Use HTTPS, short-lived tokens, refresh tokens
+
+Brute Force:
+- Attack: Try many passwords/tokens
+- Defense: Rate limit, bcrypt (slow), account lockout
+*/
+
+// SecurityBestPracticesDemo covers security patterns
 func SecurityBestPracticesDemo() {
-	fmt.Println("\n╔════════════════════════════════════════════════════════╗")
-	fmt.Println("║      AUTHENTICATION SECURITY DEMO                      ║")
-	fmt.Println("╚════════════════════════════════════════════════════════╝\n")
+	fmt.Println("\n========== SECURITY BEST PRACTICES ==========")
 
-	fmt.Println("1. SECURE TOKEN STORAGE:")
-	fmt.Println(`
-// Browser storage options:
+	fmt.Println("\n1. PASSWORD SECURITY:")
+	fmt.Println("   ✓ DO:")
+	fmt.Println("     - Use bcrypt/scrypt/argon2 for hashing")
+	fmt.Println("     - Require minimum 12 characters")
+	fmt.Println("     - Require mixed case, numbers, special chars")
+	fmt.Println("     - Hash on server side ONLY")
+	fmt.Println("     - Never log passwords")
+	fmt.Println("     - Implement rate limiting on login")
+	fmt.Println("")
+	fmt.Println("   ✗ DON'T:")
+	fmt.Println("     - Store plain text passwords")
+	fmt.Println("     - Use weak hashing (MD5, SHA1, SHA256)")
+	fmt.Println("     - Use reversible encryption")
+	fmt.Println("     - Send passwords via email")
+	fmt.Println("     - Log authentication attempts")
 
-// 1. HTTP-only Cookies (RECOMMENDED)
-// Pros:
-// - Automatic, sent with every request
-// - Protected from XSS (JavaScript cannot access)
-// - Protected from CSRF (with SameSite flag)
-// Cons:
-// - CSRF possible if not configured correctly
-// - Cannot send to different domain
+	fmt.Println("\n2. TOKEN SECURITY:")
+	fmt.Println("   ✓ DO:")
+	fmt.Println("     - Use HTTPS only (encrypted)")
+	fmt.Println("     - Keep access tokens short-lived (15 min)")
+	fmt.Println("     - Keep refresh tokens in HTTP-only cookies")
+	fmt.Println("     - Set Secure flag (HTTPS only)")
+	fmt.Println("     - Set SameSite flag (prevent CSRF)")
+	fmt.Println("     - Implement token rotation")
+	fmt.Println("     - Verify token signature on every request")
+	fmt.Println("")
+	fmt.Println("   ✗ DON'T:")
+	fmt.Println("     - Send tokens via URL query parameters")
+	fmt.Println("     - Store sensitive data in JWT claims")
+	fmt.Println("     - Use long-lived access tokens")
+	fmt.Println("     - Send HTTP (unencrypted)")
+	fmt.Println("     - Disable SSL/TLS verification")
 
-// Implementation:
-cookie := &http.Cookie{
-    Name:     "access_token",
-    Value:    tokenString,
-    HttpOnly: true,  // ← CRITICAL: Prevents JavaScript access
-    Secure:   true,  // ← HTTPS only
-    SameSite: http.SameSiteLaxMode,  // ← Prevents CSRF
-    Path:     "/",
-    MaxAge:   15 * 60,  // 15 minutes
-}
-http.SetCookie(w, cookie)
+	fmt.Println("\n3. PREVENTING COMMON ATTACKS:")
+	fmt.Println("   XSS Prevention:")
+	fmt.Println("   - Use HTTP-only cookies")
+	fmt.Println("   - Sanitize all user input")
+	fmt.Println("   - Set Content-Security-Policy headers")
+	fmt.Println("")
+	fmt.Println("   CSRF Prevention:")
+	fmt.Println("   - Use SameSite=Lax cookie flag")
+	fmt.Println("   - Verify Origin/Referer headers")
+	fmt.Println("   - Use CSRF tokens for state-changing operations")
+	fmt.Println("")
+	fmt.Println("   Brute Force Prevention:")
+	fmt.Println("   - Rate limit login attempts (5 fails = 15 min lockout)")
+	fmt.Println("   - Use slow hashing (bcrypt)")
+	fmt.Println("   - Log failed attempts")
+	fmt.Println("   - Implement CAPTCHA after N failures")
 
-// 2. Local Storage
-// Pros:
-// - Simple to implement
-// - Accessible from JavaScript
-// Cons:
-// - Vulnerable to XSS attacks
-// - Must manually send in requests
-
-// 3. Session Storage
-// Pros:
-// - Cleared on browser close
-// - Vulnerable to XSS
-// Cons:
-// - Lost on page refresh
-`)
-
-	fmt.Println("\n2. COMMON ATTACKS AND DEFENSES:")
-	fmt.Println(`
-// XSS (Cross-Site Scripting)
-// Attack: Inject malicious script into page
-// Defense:
-// - Use HTTP-only cookies
-// - Sanitize all user input
-// - Use Content Security Policy headers
-// - Escape output in templates
-
-// CSRF (Cross-Site Request Forgery)
-// Attack: Make user perform unwanted action
-// Defense:
-// - Use SameSite cookie flag
-// - Use CSRF tokens
-// - Verify Origin/Referer headers
-// - Use POST for state-changing operations
-
-// Token Hijacking
-// Attack: Steal token from storage
-// Defense:
-// - Use HTTPS (encrypt in transit)
-// - Use short-lived tokens
-// - Use refresh tokens
-// - Implement token rotation
-
-// Brute Force
-// Attack: Try many passwords
-// Defense:
-// - Rate limit login attempts
-// - Implement account lockout
-// - Use slow hashing (bcrypt)
-// - Require strong passwords
-`)
-
-	fmt.Println("✓ Security best practices demonstrated")
+	fmt.Println("\n✓ Security best practices demonstrated")
 }
 
-// RealWorldAuthExampleDemo shows complete auth system
-func RealWorldAuthExampleDemo() {
-	fmt.Println("\n╔════════════════════════════════════════════════════════╗")
-	fmt.Println("║    REAL WORLD AUTH EXAMPLE DEMO                        ║")
-	fmt.Println("╚════════════════════════════════════════════════════════╝\n")
+// ============================================================================
+// 5. MAIN EXECUTION
+// ============================================================================
 
-	fmt.Println("COMPLETE AUTHENTICATION SYSTEM:")
-	fmt.Println(`
-// File: auth.go
-package auth
-
-type User struct {
-    ID       string
-    Username string
-    Email    string
-    Password string // This is the HASH, not plain text
-    Role     string
-}
-
-type AuthService struct {
-    secretKey string
-    users     map[string]*User
-}
-
-// Register user
-func (s *AuthService) Register(username, email, password string) error {
-    // Validate input
-    if len(password) < 12 {
-        return fmt.Errorf("password too short")
-    }
-    
-    // Hash password
-    hashedPassword, err := HashPassword(password)
-    if err != nil {
-        return err
-    }
-    
-    // Create user
-    user := &User{
-        ID:       generateID(),
-        Username: username,
-        Email:    email,
-        Password: hashedPassword,
-        Role:     "user",
-    }
-    
-    s.users[user.ID] = user
-    return nil
-}
-
-// Login and get tokens
-func (s *AuthService) Login(username, password string) (*TokenPair, error) {
-    // Find user
-    var user *User
-    for _, u := range s.users {
-        if u.Username == username {
-            user = u
-            break
-        }
-    }
-    
-    if user == nil {
-        return nil, fmt.Errorf("user not found")
-    }
-    
-    // Verify password
-    if !VerifyPassword(user.Password, password) {
-        return nil, fmt.Errorf("invalid password")
-    }
-    
-    // Create token pair
-    return CreateTokenPair(user.ID)
-}
-
-// Middleware handler
-func (s *AuthService) AuthMiddleware(next http.Handler) http.Handler {
-    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-        token := r.Header.Get("Authorization")
-        if token == "" {
-            http.Error(w, "Missing token", http.StatusUnauthorized)
-            return
-        }
-        
-        // Remove "Bearer " prefix
-        token = strings.TrimPrefix(token, "Bearer ")
-        
-        claims, err := VerifyToken(token)
-        if err != nil {
-            http.Error(w, "Invalid token", http.StatusUnauthorized)
-            return
-        }
-        
-        // Add claims to context
-        ctx := context.WithValue(r.Context(), "user", claims)
-        next.ServeHTTP(w, r.WithContext(ctx))
-    })
-}
-`)
-
-	fmt.Println("✓ Real world auth example demonstrated")
-}
-
-// RunAuthenticationExamples executes all authentication demos
+// RunAuthenticationExamples executes all authentication demonstrations
 func RunAuthenticationExamples() {
-	fmt.Println("╔════════════════════════════════════════════════════════╗")
+	fmt.Println("\n╔════════════════════════════════════════════════════════╗")
 	fmt.Println("║   AUTHENTICATION AND JWT - COMPREHENSIVE GUIDE          ║")
 	fmt.Println("╚════════════════════════════════════════════════════════╝")
 
 	PasswordHashingDemo()
 	JWTBasicsDemo()
-	JWTImplementationDemo()
 	RefreshTokensDemo()
 	SecurityBestPracticesDemo()
-	RealWorldAuthExampleDemo()
 
 	fmt.Println("\n╔════════════════════════════════════════════════════════╗")
 	fmt.Println("║    ALL AUTHENTICATION EXAMPLES COMPLETE                 ║")
-	fmt.Println("╚════════════════════════════════════════════════════════╝\n")
+	fmt.Println("╚════════════════════════════════════════════════════════╝")
 
-	fmt.Println("KEY TAKEAWAYS:")
+	fmt.Println("\nKEY TAKEAWAYS:")
 	fmt.Println("✓ Never store plain text passwords (use bcrypt)")
 	fmt.Println("✓ JWT tokens are stateless and scalable")
 	fmt.Println("✓ Access tokens should be short-lived (15 min)")
